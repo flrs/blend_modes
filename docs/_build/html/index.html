@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Blend Modes &#8212; Blend Modes 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="blend-modes">
+<h1>Blend Modes<a class="headerlink" href="#blend-modes" title="Permalink to this headline">¶</a></h1>
+<p>This Python package implements blend modes for images.</p>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>The Blend Modes package enables blending different images, or image
+layers, by means of blend modes. These modes are commonly found in
+graphics programs like <a class="reference external" href="http://www.adobe.com/Photoshop">Adobe
+Photoshop</a> or
+<a class="reference external" href="https://www.gimp.org/">GIMP</a>.</p>
+<p>Blending through blend modes allows to mix images in a variety of ways.
+This package currently supports the following blend modes (name of the
+respective functions in the package in *italics`):</p>
+<ul class="simple">
+<li>Soft Light (<code class="docutils literal"><span class="pre">blend_modes.soft_light</span></code>)</li>
+<li>Lighten Only (<code class="docutils literal"><span class="pre">blend_modes.lighten_only</span></code>)</li>
+<li>Dodge (<code class="docutils literal"><span class="pre">blend_modes.dodge</span></code>)</li>
+<li>Addition (<code class="docutils literal"><span class="pre">blend_modes.addition</span></code>)</li>
+<li>Darken Only (<code class="docutils literal"><span class="pre">blend_modes.darken_only</span></code>)</li>
+<li>Multiply (<code class="docutils literal"><span class="pre">blend_modes.multiply</span></code>)</li>
+<li>Hard Light (<code class="docutils literal"><span class="pre">blend_modes.hard_light</span></code>)</li>
+<li>Difference (<code class="docutils literal"><span class="pre">blend_modes.difference</span></code>)</li>
+<li>Subtract (<code class="docutils literal"><span class="pre">blend_modes.subtract</span></code>)</li>
+<li>Grain Extract (known from GIMP, <code class="docutils literal"><span class="pre">blend_modes.grain_extract</span></code>)</li>
+<li>Grain Merge (known from GIMP, <code class="docutils literal"><span class="pre">blend_modes.grain_merge</span></code>)</li>
+<li>Divide (<code class="docutils literal"><span class="pre">blend_modes.divide</span></code>)</li>
+</ul>
+<p>The intensity of blending can be controlled by means of an <em>opacity</em>
+parameter that is passed into the functions. See <a class="reference external" href="#usage">Usage</a> for
+more information.</p>
+<p>The Blend Modes package is optimized for speed. It takes advantage of
+vectorization through Numpy. Further speedup can be achieved when
+implementing the package in Cython. However, Cython implementation is
+not part of this package.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The blend mode functions take image data expressed as arrays as an
+input. These image data are usually obtained through functions from
+image processing packages. Two popular image processing packages in
+Python are <a class="reference external" href="https://pypi.python.org/pypi/PIL">PIL</a> or its fork
+<a class="reference external" href="https://pypi.python.org/pypi/Pillow/">Pillow</a> and
+<a class="reference external" href="http://opencv.org/">OpenCV</a>. The examples in this chapter show how
+to blend images using these packages.</p>
+<div class="section" id="input-and-output-formats">
+<h3>Input and Output Formats<a class="headerlink" href="#input-and-output-formats" title="Permalink to this headline">¶</a></h3>
+<p>A typical blend mode operation is called like this:</p>
+<p><code class="docutils literal"><span class="pre">blend_modes.soft_light(bg_img,</span> <span class="pre">fg_img,</span> <span class="pre">opacity)</span></code></p>
+<p>The blend mode functions expect
+<a class="reference external" href="https://pypi.python.org/pypi/numpy">Numpy</a> float arrays in the
+format [<em>pixels in dimension 1</em>,<em>pixels in dimension 2</em>,4] as an
+input. Both images needs to have the same size, so the <em>pixels in
+dimension 1</em> must be the same for <code class="docutils literal"><span class="pre">bg_img</span></code> and <code class="docutils literal"><span class="pre">fg_img</span></code>. Same
+applies to the <em>pixels in dimension 2</em>. Thus, a valid shape of the
+arrays would be <code class="docutils literal"><span class="pre">bg_img.shape</span> <span class="pre">==</span> <span class="pre">(640,320,4)</span></code> and
+<code class="docutils literal"><span class="pre">fg_img.shape</span> <span class="pre">==</span> <span class="pre">(640,320,4)</span></code>.</p>
+<p>The order of the channels in the third dimension should be <em>R, G, B, A</em>,
+where <em>A</em> is the alpha channel. All values should be <em>floats</em> in the
+range <em>0.0 &lt;= value &lt;= 255.0</em>.</p>
+<p>The blend mode functions return arrays in the same format as the input
+format.</p>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p>The following examples show how to use the Blend Modes package in
+typical applications.</p>
+<p>The examples are structured in three parts:</p>
+<ol class="arabic simple">
+<li>Load background and foreground image. The foreground image is to be
+blended onto the background image.</li>
+<li>Use the Blend Modes package to blend the two images via the &#8220;soft
+light&#8221; blend mode. The package supports multiple blend modes. See the
+<a class="reference external" href="#description">Description</a> for a full list.</li>
+<li>Display the blended image.</li>
+</ol>
+<div class="section" id="pil-pillow-example">
+<h4>PIL/Pillow Example<a class="headerlink" href="#pil-pillow-example" title="Permalink to this headline">¶</a></h4>
+<p>The following example shows how to use the Blend Modes package with the
+<a class="reference external" href="https://pypi.python.org/pypi/PIL">PIL</a> or
+<a class="reference external" href="https://pypi.python.org/pypi/Pillow/">Pillow</a> packages.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">blend_modes</span> <span class="k">import</span> <span class="n">blend_modes</span>
+
+<span class="c1"># Import background image</span>
+<span class="n">background_img_raw</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;background.png&#39;</span><span class="p">)</span>  <span class="c1"># RGBA image</span>
+<span class="n">background_img</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">background_img_raw</span><span class="p">)</span>  <span class="c1"># Inputs to blend_modes need to be numpy arrays.</span>
+<span class="n">background_img_float</span> <span class="o">=</span> <span class="n">background_img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Inputs to blend_modes need to be floats.</span>
+
+<span class="c1"># Import foreground image</span>
+<span class="n">foreground_img_raw</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;foreground.png&#39;</span><span class="p">)</span>  <span class="c1"># RGBA image</span>
+<span class="n">foreground_img</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">foreground_img_raw</span><span class="p">)</span>  <span class="c1"># Inputs to blend_modes need to be numpy arrays.</span>
+<span class="n">foreground_img_float</span> <span class="o">=</span> <span class="n">foreground_img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Inputs to blend_modes need to be floats.</span>
+
+<span class="c1"># Blend images</span>
+<span class="n">opacity</span> <span class="o">=</span> <span class="mf">0.7</span>  <span class="c1"># The opacity of the foreground that is blended onto the background is 70 %.</span>
+<span class="n">blended_img_float</span> <span class="o">=</span> <span class="n">blend_modes</span><span class="o">.</span><span class="n">soft_light</span><span class="p">(</span><span class="n">background_img_float</span><span class="p">,</span> <span class="n">foreground_img_float</span><span class="p">,</span> <span class="n">opacity</span><span class="p">)</span>
+
+<span class="c1"># Convert blended image back into PIL image</span>
+<span class="n">blended_img</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">blended_img_float</span><span class="p">)</span>  <span class="c1"># Image needs to be converted back to uint8 type for PIL handling.</span>
+<span class="n">blended_img_raw</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">blended_img</span><span class="p">)</span>  <span class="c1"># Note that alpha channels are displayed in black by PIL by default.</span>
+                                                <span class="c1"># This behavior is difficult to change (although possible).</span>
+                                                <span class="c1"># If you have alpha channels in your images, then you should give</span>
+                                                <span class="c1"># OpenCV a try.</span>
+
+<span class="c1"># Display blended image</span>
+<span class="n">blended_img_raw</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="opencv-example">
+<h4>OpenCV Example<a class="headerlink" href="#opencv-example" title="Permalink to this headline">¶</a></h4>
+<p>The following example shows how to use the Blend Modes package with
+<a class="reference external" href="http://opencv.org/">OpenCV</a>.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>  <span class="c1"># import OpenCV</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">blend_modes</span> <span class="k">import</span> <span class="n">blend_modes</span>
+
+<span class="c1"># Import background image</span>
+<span class="n">background_img_float</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;background.png&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="c1"># Import foreground image</span>
+<span class="n">foreground_img_float</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;foreground.png&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="c1"># Blend images</span>
+<span class="n">opacity</span> <span class="o">=</span> <span class="mf">0.7</span>  <span class="c1"># The opacity of the foreground that is blended onto the background is 70 %.</span>
+<span class="n">blended_img_float</span> <span class="o">=</span> <span class="n">blend_modes</span><span class="o">.</span><span class="n">soft_light</span><span class="p">(</span><span class="n">background_img_float</span><span class="p">,</span> <span class="n">foreground_img_float</span><span class="p">,</span> <span class="n">opacity</span><span class="p">)</span>
+
+<span class="c1"># Display blended image</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span><span class="n">blended_img_float</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>  <span class="c1"># Press a key to close window with the image.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The Blend Modes package can be installed through pip:
+<code class="docutils literal"><span class="pre">$</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">blend_modes</span></code></p>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>The Blend Modes package needs
+<a class="reference external" href="https://pypi.python.org/pypi/numpy">Numpy</a> to function correctly.
+For loading images the following packages have been successfully used:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://pypi.python.org/pypi/PIL">PIL</a></li>
+<li><a class="reference external" href="https://pypi.python.org/pypi/Pillow/">Pillow</a></li>
+<li><a class="reference external" href="http://opencv.org/">OpenCV</a></li>
+</ul>
+</div>
+<div class="section" id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<p>Blend modes are further described on
+<a class="reference external" href="https://en.wikipedia.org/wiki/Blend_modes">Wikipedia</a>. An actual
+implementation can be found in the <a class="reference external" href="https://git.gnome.org/browse/gimp/tree/app/operations/">GIMP source
+code</a>, e.g.
+in the file that describes the <em>division</em> operation,
+<a class="reference external" href="https://git.gnome.org/browse/gimp/tree/app/operations/gimpoperationdividemode.c">gimpoperationdividecode.c</a>.</p>
+</div>
+<div class="section" id="contribution">
+<h2>Contribution<a class="headerlink" href="#contribution" title="Permalink to this headline">¶</a></h2>
+<p>I am happy about any contribution or feedback. Please let me know about
+your comments via the Issues tab on
+<a class="reference external" href="https://github.com/flrs/blend_modes/issues">GitHub</a>.</p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>The Blend Modes package is distributed under the <a class="reference external" href="https://github.com/flrs/blend_modes/blob/master/LICENSE.txt">MIT License
+(MIT)</a>.
+Please also take note of the licenses of the dependencies.</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Blend Modes</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#input-and-output-formats">Input and Output Formats</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#pil-pillow-example">PIL/Pillow Example</a></li>
+<li><a class="reference internal" href="#opencv-example">OpenCV Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+<li><a class="reference internal" href="#contribution">Contribution</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Florian Roscheck.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5b1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>blend_modes package &#8212; Blend Modes 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="blend-modes-package">
+<h1>blend_modes package<a class="headerlink" href="#blend-modes-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-blend_modes.blend_modes">
+<span id="blend-modes-blend-modes-module"></span><h2>blend_modes.blend_modes module<a class="headerlink" href="#module-blend_modes.blend_modes" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="blend_modes.blend_modes.addition">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">addition</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.addition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply addition blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Addition">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">addition</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.darken_only">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">darken_only</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.darken_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply darken only blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Darken_Only">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">darken_only</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.difference">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">difference</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.difference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply difference blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Difference">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">difference</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.divide">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">divide</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.divide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply divide blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Divide">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">divide</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.dodge">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">dodge</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.dodge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply dodge blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Dodge_and_burn">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">dodge</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.grain_extract">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">grain_extract</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.grain_extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply grain extract blending mode of a layer on an image.</p>
+<p>Find more information on the <a class="reference external" href="https://userbase.kde.org/Krita/Manual/Blendingmodes#Grain_Extract">KDE UserBase Wiki</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">grain_extract</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.grain_merge">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">grain_merge</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.grain_merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply grain merge blending mode of a layer on an image.</p>
+<p>Find more information on the <a class="reference external" href="https://userbase.kde.org/Krita/Manual/Blendingmodes#Grain_Merge">KDE UserBase Wiki</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">grain_merge</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.hard_light">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">hard_light</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.hard_light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply hard light blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Hard_Light">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">hard_light</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.lighten_only">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">lighten_only</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.lighten_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply lighten only blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Lighten_Only">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">lighten_only</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.multiply">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">multiply</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.multiply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply multiply blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Multiply">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.screen">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">screen</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.screen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply screen blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Screen">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">screen</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.soft_light">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">soft_light</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.soft_light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply soft light blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Soft_Light">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">soft_light</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blend_modes.blend_modes.subtract">
+<code class="descclassname">blend_modes.blend_modes.</code><code class="descname">subtract</code><span class="sig-paren">(</span><em>img_in</em>, <em>img_layer</em>, <em>opacity</em><span class="sig-paren">)</span><a class="headerlink" href="#blend_modes.blend_modes.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply subtract blending mode of a layer on an image.</p>
+<p>Find more information on <a class="reference external" href="https://en.wikipedia.org/w/index.php?title=Blend_modes&amp;oldid=747749280#Subtract">Wikipedia</a>.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">img_filters_c</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="n">img_in</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./orig.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_layer</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;./layer.png&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">img_out</span> <span class="o">=</span> <span class="n">subtract</span><span class="p">(</span><span class="n">img_in</span><span class="p">,</span><span class="n">img_layer</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">img_out</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img_in</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0-255.0</em>) &#8211; Image to be blended upon</li>
+<li><strong>img_layer</strong> (<em>3-dimensional numpy array of floats</em><em> (</em><em>r/g/b/a</em><em>) </em><em>in range 0.0-255.0</em>) &#8211; Layer to be blended with image</li>
+<li><strong>opacity</strong> (<em>float</em>) &#8211; Desired opacity of layer for blending</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Blended image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-blend_modes">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blend_modes" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">blend_modes package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-blend_modes.blend_modes">blend_modes.blend_modes module</a></li>
+<li><a class="reference internal" href="#module-blend_modes">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/blend_modes.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Florian Roscheck.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5b1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/blend_modes.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
