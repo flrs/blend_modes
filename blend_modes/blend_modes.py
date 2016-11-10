@@ -9,11 +9,11 @@ def soft_light(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import img_filters_c, cv2, numpy
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = soft_light(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -66,7 +66,7 @@ def lighten_only(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = lighten_only(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -111,7 +111,7 @@ def screen(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = screen(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -156,7 +156,7 @@ def dodge(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = dodge(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -201,7 +201,7 @@ def addition(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = addition(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -246,7 +246,7 @@ def darken_only(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = darken_only(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -291,7 +291,7 @@ def multiply(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = multiply(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -336,7 +336,7 @@ def hard_light(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = hard_light(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -384,7 +384,7 @@ def difference(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = difference(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -430,7 +430,7 @@ def subtract(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = subtract(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -475,7 +475,7 @@ def grain_extract(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = grain_extract(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -520,7 +520,7 @@ def grain_merge(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = grain_merge(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon
@@ -565,7 +565,7 @@ def divide(img_in, img_layer, opacity):
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = divide(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
 
     :param img_in: Image to be blended upon

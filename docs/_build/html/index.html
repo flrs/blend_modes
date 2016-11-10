@@ -170,7 +170,8 @@ light&#8221; blend mode. The package supports multiple blend modes. See the
 <span class="n">blended_img_float</span> <span class="o">=</span> <span class="n">blend_modes</span><span class="o">.</span><span class="n">soft_light</span><span class="p">(</span><span class="n">background_img_float</span><span class="p">,</span> <span class="n">foreground_img_float</span><span class="p">,</span> <span class="n">opacity</span><span class="p">)</span>
 
 <span class="c1"># Display blended image</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span><span class="n">blended_img_float</span><span class="p">)</span>
+<span class="n">blended_img_uint8</span> <span class="o">=</span> <span class="n">blended_img_float</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1"># Convert image to OpenCV native display format</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="n">blended_img_uint8</span><span class="p">)</span>
 <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>  <span class="c1"># Press a key to close window with the image.</span>
 </pre></div>
 </div>

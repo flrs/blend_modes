@@ -149,7 +149,8 @@ The following example shows how to use the Blend Modes package with
     blended_img_float = blend_modes.soft_light(background_img_float, foreground_img_float, opacity)
 
     # Display blended image
-    cv2.imshow('window',blended_img_float)
+    blended_img_uint8 = blended_img_float.astype(numpy.uint8)  # Convert image to OpenCV native display format
+    cv2.imshow('window', blended_img_uint8)
     cv2.waitKey()  # Press a key to close window with the image.
 
 Installation
