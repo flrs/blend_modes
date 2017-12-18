@@ -28,8 +28,8 @@ def soft_light(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -82,8 +82,8 @@ def lighten_only(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -128,8 +128,8 @@ def screen(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -174,8 +174,8 @@ def dodge(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -220,8 +220,8 @@ def addition(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -266,8 +266,8 @@ def darken_only(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -312,8 +312,8 @@ def multiply(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -358,8 +358,8 @@ def hard_light(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -407,8 +407,8 @@ def difference(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -454,8 +454,8 @@ def subtract(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -500,8 +500,8 @@ def grain_extract(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -546,8 +546,8 @@ def grain_merge(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -592,8 +592,8 @@ def divide(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
@@ -638,8 +638,8 @@ def overlay(img_in, img_layer, opacity):
     """
 
     # sanity check of inputs
-    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
