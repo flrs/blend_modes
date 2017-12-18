@@ -9,7 +9,8 @@ def soft_light(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2, numpy
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = soft_light(img_in,img_layer,0.5)
@@ -62,7 +63,8 @@ def lighten_only(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = lighten_only(img_in,img_layer,0.5)
@@ -107,7 +109,8 @@ def screen(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = screen(img_in,img_layer,0.5)
@@ -152,7 +155,8 @@ def dodge(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = dodge(img_in,img_layer,0.5)
@@ -197,7 +201,8 @@ def addition(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = addition(img_in,img_layer,0.5)
@@ -242,7 +247,8 @@ def darken_only(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = darken_only(img_in,img_layer,0.5)
@@ -287,7 +293,8 @@ def multiply(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = multiply(img_in,img_layer,0.5)
@@ -332,7 +339,8 @@ def hard_light(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = hard_light(img_in,img_layer,0.5)
@@ -380,7 +388,8 @@ def difference(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = difference(img_in,img_layer,0.5)
@@ -426,7 +435,8 @@ def subtract(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = subtract(img_in,img_layer,0.5)
@@ -471,7 +481,8 @@ def grain_extract(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = grain_extract(img_in,img_layer,0.5)
@@ -516,7 +527,8 @@ def grain_merge(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = grain_merge(img_in,img_layer,0.5)
@@ -561,7 +573,8 @@ def divide(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = divide(img_in,img_layer,0.5)
@@ -597,6 +610,7 @@ def divide(img_in, img_layer, opacity):
     img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
     return img_out*255.0
 
+
 def overlay(img_in, img_layer, opacity):
     """
     Apply overlay blending mode of a layer on an image.
@@ -605,7 +619,8 @@ def overlay(img_in, img_layer, opacity):
 
     Example::
 
-        import img_filters_c, cv2
+        import cv2, numpy
+        from blend_modes import blend_modes
         img_in = cv2.imread('./orig.png', -1).astype(float)
         img_layer = cv2.imread('./layer.png', -1).astype(float)
         img_out = overlay(img_in,img_layer,0.5)

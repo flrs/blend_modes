@@ -14,7 +14,7 @@ Photoshop <http://www.adobe.com/Photoshop>`__ or
 
 Blending through blend modes allows to mix images in a variety of ways.
 This package currently supports the following blend modes (name of the
-respective functions in the package in \*italics\`):
+respective functions in the package in ``italics``):
 
 -  Soft Light (``blend_modes.soft_light``)
 -  Lighten Only (``blend_modes.lighten_only``)
@@ -28,6 +28,7 @@ respective functions in the package in \*italics\`):
 -  Grain Extract (known from GIMP, ``blend_modes.grain_extract``)
 -  Grain Merge (known from GIMP, ``blend_modes.grain_merge``)
 -  Divide (``blend_modes.divide``)
+-  Overlay (``blend_modes.overlay``)
 
 The intensity of blending can be controlled by means of an *opacity*
 parameter that is passed into the functions. See `Usage <#usage>`__ for

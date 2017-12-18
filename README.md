@@ -6,7 +6,7 @@ Description
 -----------
 The Blend Modes package enables blending different images, or image layers, by means of blend modes. These modes are commonly found in graphics programs like [Adobe Photoshop](http://www.adobe.com/Photoshop) or [GIMP](https://www.gimp.org/).
 
-Blending through blend modes allows to mix images in a variety of ways. This package currently supports the following blend modes (name of the respective functions in the package in *italics`):
+Blending through blend modes allows to mix images in a variety of ways. This package currently supports the following blend modes (name of the respective functions in the package in `italics`):
 
 * Soft Light (`blend_modes.soft_light`)
 * Lighten Only (`blend_modes.lighten_only`)
@@ -20,6 +20,7 @@ Blending through blend modes allows to mix images in a variety of ways. This pac
 * Grain Extract (known from GIMP, `blend_modes.grain_extract`)
 * Grain Merge (known from GIMP, `blend_modes.grain_merge`)
 * Divide (`blend_modes.divide`)
+* Overlay (`blend_modes.overlay`)
 
 The intensity of blending can be controlled by means of an *opacity* parameter that is passed into the functions. See [Usage](#usage) for more information.
 
