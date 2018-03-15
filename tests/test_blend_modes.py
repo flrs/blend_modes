@@ -67,4 +67,14 @@ class TestBlendModes(unittest.TestCase):
         comp = cv2.imread('./overlay.png', -1).astype(float)
         self.failIf(np.amax(np.absolute(out-comp)) > self.test_limit)
 
+    def test_normal_50p(self):
+        out = normal(self.img_in, self.img_layer, 0.5)
+        comp = cv2.imread('./normal_50p.png', -1).astype(float)
+        self.failIf(np.amax(np.absolute(out-comp)) > self.test_limit)
+
+    def test_normal_100p(self):
+        out = normal(self.img_in, self.img_layer, 1.0)
+        comp = cv2.imread('./normal_100p.png', -1).astype(float)
+        self.failIf(np.amax(np.absolute(out-comp)) > self.test_limit)
+
 unittest.main()

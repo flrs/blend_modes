@@ -1,6 +1,59 @@
 import numpy as np
 
 
+
+def normal(img_a, img_b, opacity):
+    """
+    Apply "normal" blending mode of a layer on an image.
+
+    Find more information on `Wikipedia <https://en.wikipedia.org/wiki/Alpha_compositing#Description>`__.
+
+    Example::
+
+        import cv2, numpy
+        from blend_modes import blend_modes
+        img_in = cv2.imread('./orig.png', -1).astype(float)
+        img_layer = cv2.imread('./layer.png', -1).astype(float)
+        img_out = normal(img_in,img_layer,0.8)
+        cv2.imshow('window', img_out.astype(numpy.uint8))
+        cv2.waitKey()
+
+    :param img_in: Image to be blended upon
+    :type img_in: 3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0
+    :param img_layer: Layer to be blended with image
+    :type img_layer: 3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0
+    :param opacity: Desired opacity of layer for blending
+    :type opacity: float
+    :return: Blended image
+    :rtype: 3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0
+    """
+
+    img_a = img_a / 255.0
+    img_b = img_b / 255.0
+
+    #Add alpha-channels, if they are not proviced
+    if img_a.shape[2]==3:
+        img_a = np.dstack((img_a, np.zeros(img_a.shape[:2]+(3,))))
+    if img_b.shape[2]==3:
+        img_b = np.dstack((img_b, np.zeros(img_b.shape[:2]+(3,))))
+
+    #Extract alpha-channels and apply opacity
+    img_a_alp = np.expand_dims(img_a[:,:,3],2)*opacity # alpha of a, prepared for broadcasting
+    img_b_alp = np.expand_dims(img_b[:,:,3],2) # alpha of b, prepared for broadcasting
+
+    #Blend images
+    Cout = (img_a[:,:,:3] * img_a_alp + img_b[:,:,:3]*img_b_alp*(1-img_a_alp)) / (img_a_alp + img_b_alp*(1-img_a_alp))
+
+    #Blend alpha
+    Cout_alp = img_a_alp + img_b_alp*(1-img_a_alp)
+
+    #Combine image and alpha
+    Cout = np.dstack((Cout,Cout_alp))
+
+    return (Cout*255.0)
+
+
+
 def soft_light(img_in, img_layer, opacity):
     """
     Apply soft light blending mode of a layer on an image.
