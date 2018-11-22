@@ -21,6 +21,7 @@ Blending through blend modes allows to mix images in a variety of ways. This pac
 * Grain Merge (known from GIMP, `blend_modes.grain_merge`)
 * Divide (`blend_modes.divide`)
 * Overlay (`blend_modes.overlay`)
+* Normal (`blend_modes.normal`)
 
 The intensity of blending can be controlled by means of an *opacity* parameter that is passed into the functions. See [Usage](#usage) for more information.
 
