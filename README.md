@@ -35,7 +35,9 @@ The blend mode functions take image data expressed as arrays as an input. These 
 
 A typical blend mode operation is called like this:
 
-`blend_modes.soft_light(bg_img, fg_img, opacity)`
+```python
+blended_img = soft_light(bg_img, fg_img, opacity)
+```
 
 The blend mode functions expect [Numpy](https://pypi.python.org/pypi/numpy) float arrays in the format [*pixels in dimension 1*,*pixels in dimension 2*,4] as an input. Both images needs to have the same size, so the *pixels in dimension 1* must be the same for `bg_img` and `fg_img`. Same applies to the *pixels in dimension 2*. Thus, a valid shape of the arrays would be `bg_img.shape == (640,320,4)` and `fg_img.shape == (640,320,4)`.
 
