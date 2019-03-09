@@ -3,3 +3,4 @@ recursive-include docs/_build/html *
 
 #Misc
 include LICENSE.txt
+include CHANGELOG.md
