@@ -668,7 +668,11 @@ def overlay(img_in, img_layer, opacity):
     """
     Apply overlay blending mode of a layer on an image.
 
-    Find more information on `https://docs.gimp.org/en/gimp-concepts-layer-modes.html`
+    Find more information on `https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=868545948#Overlay`
+
+    .. note:: The implementation of this method was changed in version 2.0.0. Previously, it would be identical to the
+              soft light blending mode. Now, it resembles the implementation on Wikipedia. You can still use the soft light
+              blending mode if you are looking for backwards compatibility.
 
     Example::
 
@@ -702,7 +706,9 @@ def overlay(img_in, img_layer, opacity):
 
     ratio = _compose_alpha(img_in, img_layer, opacity)
 
-    comp = img_in[:,:,:3] * (img_in[:,:,:3] + (2 * img_layer[:,:,:3]) * (1 - img_in[:,:,:3]))
+    comp = np.less(img_in[:, :, :3], 0.5) * (2 * img_in[:, :, :3] * img_layer[:, :, :3]) \
+           + np.greater_equal(img_in[:, :, :3], 0.5) \
+           * (1 - (2 * (1 - img_in[:, :, :3]) * (1 - img_layer[:, :, :3])))
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
     img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
