@@ -1,7 +1,6 @@
 import numpy as np
 
 
-
 def normal(img_a, img_b, opacity):
     """Apply "normal" blending mode of a layer on an image.
     
@@ -32,23 +31,23 @@ def normal(img_a, img_b, opacity):
     img_a = img_a / 255.0
     img_b = img_b / 255.0
 
-    #Add alpha-channels, if they are not proviced
+    # Add alpha-channels, if they are not proviced
     if img_a.shape[2]==3:
         img_a = np.dstack((img_a, np.zeros(img_a.shape[:2]+(3,))))
     if img_b.shape[2]==3:
         img_b = np.dstack((img_b, np.zeros(img_b.shape[:2]+(3,))))
 
-    #Extract alpha-channels and apply opacity
+    # Extract alpha-channels and apply opacity
     img_a_alp = np.expand_dims(img_a[:,:,3],2)*opacity # alpha of a, prepared for broadcasting
     img_b_alp = np.expand_dims(img_b[:,:,3],2) # alpha of b, prepared for broadcasting
 
-    #Blend images
+    # Blend images
     Cout = (img_a[:,:,:3] * img_a_alp + img_b[:,:,:3]*img_b_alp*(1-img_a_alp)) / (img_a_alp + img_b_alp*(1-img_a_alp))
 
-    #Blend alpha
+    # Blend alpha
     Cout_alp = img_a_alp + img_b_alp*(1-img_a_alp)
 
-    #Combine image and alpha
+    # Combine image and alpha
     Cout = np.dstack((Cout,Cout_alp))
 
     return (Cout*255.0)
@@ -80,7 +79,7 @@ def soft_light(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -133,7 +132,7 @@ def lighten_only(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -178,7 +177,7 @@ def screen(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -223,7 +222,7 @@ def dodge(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -268,7 +267,7 @@ def addition(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -313,7 +312,7 @@ def darken_only(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -358,7 +357,7 @@ def multiply(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -403,7 +402,7 @@ def hard_light(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -451,7 +450,7 @@ def difference(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -497,7 +496,7 @@ def subtract(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -542,7 +541,7 @@ def grain_extract(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -587,7 +586,7 @@ def grain_merge(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -632,7 +631,7 @@ def divide(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
@@ -681,7 +680,7 @@ def overlay(img_in, img_layer, opacity):
 
     """
 
-    # sanity check of inputs
+    # Sanity check of inputs
     assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
     assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
     assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
