@@ -14,7 +14,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # http://packaging.python.org/en/latest/tutorial.html#version
-    version='1.0.4',
+    version='2.0.0',
 
     description='Image processing blend modes',
     long_description=long_description,  #this is the
@@ -35,7 +35,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
@@ -54,5 +54,7 @@ setup(
     keywords='image processing blend modes',
 
     packages=['blend_modes'],
+
+    install_requires=['numpy'],
 
 )
