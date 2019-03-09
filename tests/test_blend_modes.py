@@ -1,6 +1,7 @@
 import cv2
 import unittest
-from blend_modes.blend_modes import *
+
+from blend_modes import *
 
 
 class TestBlendModes(unittest.TestCase):

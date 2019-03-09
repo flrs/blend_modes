@@ -62,7 +62,7 @@ The following example shows how to use the Blend Modes package with the [PIL](ht
 ```python
 from PIL import Image
 import numpy
-from blend_modes import blend_modes
+from blend_modes import soft_light
 
 # Import background image
 background_img_raw = Image.open('background.png')  # RGBA image
@@ -76,7 +76,7 @@ foreground_img_float = foreground_img.astype(float)  # Inputs to blend_modes nee
 
 # Blend images
 opacity = 0.7  # The opacity of the foreground that is blended onto the background is 70 %.
-blended_img_float = blend_modes.soft_light(background_img_float, foreground_img_float, opacity)
+blended_img_float = soft_light(background_img_float, foreground_img_float, opacity)
 
 # Convert blended image back into PIL image
 blended_img = numpy.uint8(blended_img_float)  # Image needs to be converted back to uint8 type for PIL handling.
@@ -95,7 +95,7 @@ The following example shows how to use the Blend Modes package with [OpenCV](htt
 ```python
 import cv2  # import OpenCV
 import numpy
-from blend_modes import blend_modes
+from blend_modes import soft_light
 
 # Import background image
 background_img_float = cv2.imread('background.png',-1).astype(float)
@@ -105,7 +105,7 @@ foreground_img_float = cv2.imread('foreground.png',-1).astype(float)
 
 # Blend images
 opacity = 0.7  # The opacity of the foreground that is blended onto the background is 70 %.
-blended_img_float = blend_modes.soft_light(background_img_float, foreground_img_float, opacity)
+blended_img_float = soft_light(background_img_float, foreground_img_float, opacity)
 
 # Display blended image
 blended_img_uint8 = blended_img_float.astype(numpy.uint8)  # Convert image to OpenCV native display format
