@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/blend-modes/badge/?version=latest)](https://blend-modes.readthedocs.io/en/latest/?badge=latest)
+
 Blend Modes
 ===========
 This Python package implements blend modes for images.
