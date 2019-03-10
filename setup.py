@@ -17,7 +17,7 @@ setup(
     version='2.0.1',
 
     description='Image processing blend modes',
-    long_description=long_description,  #this is the
+    long_description=long_description,
 
     # The project's main homepage.
     url='https://github.com/flrs/blend_modes',
@@ -52,8 +52,6 @@ setup(
 
     # What does your project relate to?
     keywords='image processing blend modes',
-
-    packages=['blend_modes'],
 
     install_requires=['numpy'],
 
