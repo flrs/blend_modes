@@ -148,7 +148,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'BlendModes', u'Blend Modes Documentation',
-     author, 'BlendModes', 'One line description of project.',
+     author, 'BlendModes', 'This Python package implements blend modes for images.',
      'Miscellaneous'),
 ]
 
