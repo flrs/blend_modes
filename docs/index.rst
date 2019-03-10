@@ -3,13 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. toctree::
-   :maxdepth: 3
+.. include:: README.rst
 
-   README.rst
+Contents
+========
+
+.. toctree::
+   :maxdepth: 1
+
+   self
+   visual_examples.rst
    reference.rst
 
-Indices and tables
+Indices and Tables
 ==================
 
 * :ref:`genindex`
