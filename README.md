@@ -1,3 +1,4 @@
+[![PyPI version](https://badge.fury.io/py/blend-modes.svg)](https://badge.fury.io/py/blend-modes)
 [![Documentation Status](https://readthedocs.org/projects/blend-modes/badge/?version=latest)](https://blend-modes.readthedocs.io/en/latest/?badge=latest)
 
 Blend Modes
