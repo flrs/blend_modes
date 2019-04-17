@@ -28,7 +28,7 @@ setup(
 
     # Choose your license
     license='MIT',
-
+    packages=["blend_modes"],
     # See https://PyPI.python.org/PyPI?%3Aaction=list_classifiers
     classifiers=[
         # How mature is this project? Common values are
