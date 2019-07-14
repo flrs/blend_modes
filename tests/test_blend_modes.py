@@ -23,6 +23,11 @@ class TestBlendModes(unittest.TestCase):
         comp = cv2.imread('./darken_only.png', -1).astype(float)
         self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
 
+    def test_multiply(self):
+        out = multiply(self.img_in, self.img_layer, 0.5)
+        comp = cv2.imread('./multiply.png', -1).astype(float)
+        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
+
     def test_difference(self):
         out = difference(self.img_in, self.img_layer, 0.5)
         comp = cv2.imread('./difference.png', -1).astype(float)
