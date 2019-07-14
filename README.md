@@ -121,7 +121,8 @@ cv2.waitKey()  # Press a key to close window with the image.
 Installation
 ------------
 The Blend Modes package can be installed through pip:
-```$ pip install blend_modes```
+
+```pip install blend_modes```
 
 Dependencies
 ------------
