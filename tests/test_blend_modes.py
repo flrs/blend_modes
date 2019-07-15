@@ -2,6 +2,7 @@ import cv2
 import pytest
 
 from blend_modes import *
+from blend_modes import _assert_opacity, _assert_image_format
 
 _TEST_LIMIT = 10  # test fails if max. image color difference is > test_limit
 _TEST_TOLERANCE = 0.001  # max. ratio of RGBA pixels that may not match test criteria
@@ -108,3 +109,19 @@ def test_normal_100p(img_in, img_layer):
     out = normal(img_in, img_layer, 1.0)
     comp = cv2.imread('./normal_100p.png', -1).astype(float)
     assert _test_criteria(out, comp)
+
+
+def test_assert_opacity_wrong_variable_type():
+    opacity = '0.5'
+    with pytest.raises(TypeError):
+        assert _assert_opacity(opacity, '')
+
+
+def test_assert_opacity_right_variable_type():
+    _assert_opacity(0.5, '')
+
+
+@pytest.mark.parametrize("opacity", [-5.0, 1.01])
+def test_assert_opacity_wrong_variable_range(opacity):
+    with pytest.raises(ValueError):
+        assert _assert_opacity(opacity, '')
