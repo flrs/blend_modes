@@ -90,7 +90,18 @@ def _assert_opacity(opacity, fcn_name: str, arg_name: str = 'opacity'):
         raise ValueError(err_msg)
 
 
-def normal(img_in, img_layer, opacity):
+def _compose_alpha(img_in, img_layer, opacity):
+    """Calculate alpha composition ratio between two images.
+    """
+
+    comp_alpha = np.minimum(img_in[:, :, 3], img_layer[:, :, 3]) * opacity
+    new_alpha = img_in[:, :, 3] + (1.0 - img_in[:, :, 3]) * comp_alpha
+    np.seterr(divide='ignore', invalid='ignore')
+    ratio = comp_alpha / new_alpha
+    ratio[ratio == np.NAN] = 0.0
+    return ratio
+
+def normal(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply "normal" blending mode of a layer on an image.
 
     Find more information on `Wikipedia <https://en.wikipedia.org/wiki/Alpha_compositing#Description>`__.
@@ -788,15 +799,3 @@ def overlay(img_in, img_layer, opacity):
     img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
     img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
-
-
-def _compose_alpha(img_in, img_layer, opacity):
-    """Calculate alpha composition ratio between two images.
-    """
-
-    comp_alpha = np.minimum(img_in[:, :, 3], img_layer[:, :, 3]) * opacity
-    new_alpha = img_in[:, :, 3] + (1.0 - img_in[:, :, 3]) * comp_alpha
-    np.seterr(divide='ignore', invalid='ignore')
-    ratio = comp_alpha / new_alpha
-    ratio[ratio == np.NAN] = 0.0
-    return ratio
