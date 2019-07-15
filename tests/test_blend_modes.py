@@ -6,12 +6,15 @@ from blend_modes import *
 _TEST_LIMIT = 10  # test fails if max. image color difference is > test_limit
 _TEST_TOLERANCE = 0.001  # max. ratio of RGBA pixels that may not match test criteria
 
+
 def _test_criteria(out, comp):
     return (np.sum(np.absolute(out - comp) > _TEST_LIMIT)) / np.prod(comp.shape) < _TEST_TOLERANCE
+
 
 @pytest.fixture
 def img_in():
     return cv2.imread('./orig.png', -1).astype(float)
+
 
 @pytest.fixture
 def img_layer():
