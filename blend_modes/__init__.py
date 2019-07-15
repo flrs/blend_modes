@@ -10,7 +10,6 @@ def _assert_image_format(image, fcn_name: str, arg_name: str, force_alpha: bool 
     if the format does not match the expected format.
 
     The function specifically checks:
-
         - If the image is a numpy array
         - If the numpy array is of 'float' type
         - If the array is 3-dimensional (height x width x R/G/B/alpha layers)
@@ -115,13 +114,24 @@ def normal(img_in, img_layer, opacity, disable_type_checks: bool = False):
         img_out = normal(img_in,img_layer,0.8)
         cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
+
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
+
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
     """
+
+    if not disable_type_checks:
+        _fcn_name = 'normal'
+        _assert_image_format(img_in, _fcn_name, 'img_in', force_alpha=False)
+        _assert_image_format(img_layer, _fcn_name, 'img_layer', force_alpha=False)
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -151,7 +161,7 @@ def normal(img_in, img_layer, opacity, disable_type_checks: bool = False):
     return c_out * 255.0
 
 
-def soft_light(img_in, img_layer, opacity):
+def soft_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply soft light blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Soft_Light>`__.
@@ -170,19 +180,20 @@ def soft_light(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    _assert_image_format(img_in, 'soft_light', 'img_in')
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'soft_light'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -205,7 +216,7 @@ def soft_light(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def lighten_only(img_in, img_layer, opacity):
+def lighten_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply lighten only blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Lighten_Only>`__.
@@ -224,18 +235,20 @@ def lighten_only(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'lighten_only'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -250,7 +263,7 @@ def lighten_only(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def screen(img_in, img_layer, opacity):
+def screen(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply screen blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Screen>`__.
@@ -269,18 +282,20 @@ def screen(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'screen'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -295,7 +310,7 @@ def screen(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def dodge(img_in, img_layer, opacity):
+def dodge(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply dodge blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Dodge_and_burn>`__.
@@ -314,18 +329,20 @@ def dodge(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'dodge'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -340,7 +357,7 @@ def dodge(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def addition(img_in, img_layer, opacity):
+def addition(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply addition blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Addition>`__.
@@ -359,18 +376,20 @@ def addition(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'addition'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -385,7 +404,7 @@ def addition(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def darken_only(img_in, img_layer, opacity):
+def darken_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply darken only blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Darken_Only>`__.
@@ -404,18 +423,20 @@ def darken_only(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'darken_only'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -430,7 +451,7 @@ def darken_only(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def multiply(img_in, img_layer, opacity):
+def multiply(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply multiply blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Multiply>`__.
@@ -449,18 +470,20 @@ def multiply(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'multiply'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -475,7 +498,7 @@ def multiply(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def hard_light(img_in, img_layer, opacity):
+def hard_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply hard light blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Hard_Light>`__.
@@ -494,18 +517,20 @@ def hard_light(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'hard_light'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -524,7 +549,7 @@ def hard_light(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def difference(img_in, img_layer, opacity):
+def difference(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply difference blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Difference>`__.
@@ -543,18 +568,20 @@ def difference(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'difference'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -570,7 +597,7 @@ def difference(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def subtract(img_in, img_layer, opacity):
+def subtract(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply subtract blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Subtract>`__.
@@ -589,18 +616,20 @@ def subtract(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'subtract'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -615,7 +644,7 @@ def subtract(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def grain_extract(img_in, img_layer, opacity):
+def grain_extract(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply grain extract blending mode of a layer on an image.
     
     Find more information on the `KDE UserBase Wiki <https://userbase.kde.org/Krita/Manual/Blendingmodes#Grain_Extract>`__.
@@ -634,18 +663,20 @@ def grain_extract(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'grain_extract'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -660,7 +691,7 @@ def grain_extract(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def grain_merge(img_in, img_layer, opacity):
+def grain_merge(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply grain merge blending mode of a layer on an image.
     
     Find more information on the `KDE UserBase Wiki <https://userbase.kde.org/Krita/Manual/Blendingmodes#Grain_Merge>`__.
@@ -679,18 +710,20 @@ def grain_merge(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'grain_merge'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -705,7 +738,7 @@ def grain_merge(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def divide(img_in, img_layer, opacity):
+def divide(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply divide blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Divide>`__.
@@ -724,18 +757,20 @@ def divide(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'divide'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
@@ -750,7 +785,7 @@ def divide(img_in, img_layer, opacity):
     return img_out * 255.0
 
 
-def overlay(img_in, img_layer, opacity):
+def overlay(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply overlay blending mode of a layer on an image.
     
     Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=868545948#Overlay>`__.
@@ -773,18 +808,20 @@ def overlay(img_in, img_layer, opacity):
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
       opacity(float): Desired opacity of layer for blending
+      disable_type_checks(bool): Whether type checks within the function should be disabled. Disabling the checks may
+        yield a slight performance improvement, but comes at the cost of user experience. If you are certain that
+        you are passing in the right arguments, you may set this argument to 'True'. Defaults to 'False'.
 
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
 
-    # Sanity check of inputs
-    assert img_in.dtype.kind == 'f', 'Input variable img_in should be of numpy.float type.'
-    assert img_layer.dtype.kind == 'f', 'Input variable img_layer should be of numpy.float type.'
-    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
-    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
-    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+    if not disable_type_checks:
+        _fcn_name = 'overlay'
+        _assert_image_format(img_in, _fcn_name, 'img_in')
+        _assert_image_format(img_layer, _fcn_name, 'img_layer')
+        _assert_opacity(opacity, _fcn_name)
 
     img_in_norm = img_in/255.0
     img_layer_norm = img_layer/255.0
