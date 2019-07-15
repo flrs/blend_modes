@@ -3,13 +3,13 @@
 import numpy as np
 
 
-def normal(img_a, img_b, opacity):
+def normal(img_in, img_layer, opacity):
     """Apply "normal" blending mode of a layer on an image.
-    
+
     Find more information on `Wikipedia <https://en.wikipedia.org/wiki/Alpha_compositing#Description>`__.
-    
+
     Example::
-    
+
         import cv2, numpy
         from blend_modes import normal
         img_in = cv2.imread('./orig.png', -1).astype(float)
@@ -17,41 +17,38 @@ def normal(img_a, img_b, opacity):
         img_out = normal(img_in,img_layer,0.8)
         cv2.imshow('window', img_out.astype(numpy.uint8))
         cv2.waitKey()
-
     Args:
-      img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
-      img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
+      img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
+      img_layer(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
       opacity(float): Desired opacity of layer for blending
-      img_a: param img_b:
-      img_b: 
-
     Returns:
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
-
     """
 
-    img_a_norm = img_a / 255.0
-    img_b_norm = img_b / 255.0
+    img_in_norm = img_in / 255.0
+    img_layer_norm = img_layer / 255.0
 
     # Add alpha-channels, if they are not provided
-    if img_a_norm.shape[2] == 3:
-        img_a_norm = np.dstack((img_a_norm, np.zeros(img_a_norm.shape[:2] + (3,))))
-    if img_b_norm.shape[2] == 3:
-        img_b_norm = np.dstack((img_b_norm, np.zeros(img_b_norm.shape[:2] + (3,))))
+    if img_in_norm.shape[2] == 3:
+        img_in_norm = np.dstack((img_in_norm, np.zeros(img_in_norm.shape[:2] + (3,))))
+    if img_layer_norm.shape[2] == 3:
+        img_layer_norm = np.dstack((img_layer_norm, np.zeros(img_layer_norm.shape[:2] + (3,))))
 
     # Extract alpha-channels and apply opacity
-    img_a_alp = np.expand_dims(img_a_norm[:, :, 3], 2) * opacity  # alpha of a, prepared for broadcasting
-    img_b_alp = np.expand_dims(img_b_norm[:, :, 3], 2)  # alpha of b, prepared for broadcasting
+    img_in_alp = np.expand_dims(img_in_norm[:, :, 3], 2)  # alpha of b, prepared for broadcasting
+    img_layer_alp = np.expand_dims(img_layer_norm[:, :, 3], 2) * opacity  # alpha of a, prepared for broadcasting
 
     # Blend images
-    c_out = (img_a_norm[:, :, :3] * img_a_alp + img_b_norm[:, :, :3] * img_b_alp * (1 - img_a_alp)) \
-            / (img_a_alp + img_b_alp * (1 - img_a_alp))
+    c_out = (img_layer_norm[:, :, :3] * img_layer_alp + img_in_norm[:, :, :3] * img_in_alp * (1 - img_layer_alp)) \
+            / (img_layer_alp + img_in_alp * (1 - img_layer_alp))
 
     # Blend alpha
-    cout_alp = img_a_alp + img_b_alp * (1 - img_a_alp)
+    cout_alp = img_layer_alp + img_in_alp * (1 - img_layer_alp)
 
     # Combine image and alpha
     c_out = np.dstack((c_out, cout_alp))
+
+    np.nan_to_num(c_out, copy=False)
 
     return c_out * 255.0
 
