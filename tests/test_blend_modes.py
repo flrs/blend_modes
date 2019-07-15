@@ -1,87 +1,107 @@
 import cv2
-import unittest
+import pytest
 
 from blend_modes import *
 
+_TEST_LIMIT = 10  # test fails if max. image color difference is > test_limit
+_TEST_TOLERANCE = 0.001  # max. ratio of RGBA pixels that may not match test criteria
 
-class TestBlendModes(unittest.TestCase):
+def _test_criteria(out, comp):
+    return (np.sum(np.absolute(out - comp) > _TEST_LIMIT)) / np.prod(comp.shape) < _TEST_TOLERANCE
 
-    def __init__(self, *args, **kwargs):
-        super(TestBlendModes, self).__init__(*args, **kwargs)
-        self.test_limit = 10 # test fails if max. image color difference is > test_limit/255
-        self.img_in = cv2.imread('./orig.png', -1).astype(float)
-        self.img_layer = cv2.imread('./layer.png', -1).astype(float)
-        self.img_layer_50p = cv2.imread('./layer_50p.png', -1).astype(float)
+@pytest.fixture
+def img_in():
+    return cv2.imread('./orig.png', -1).astype(float)
 
-    def test_addition(self):
-        out = soft_light(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./soft_light.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_darken_only(self):
-        out = darken_only(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./darken_only.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_multiply(self):
-        out = multiply(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./multiply.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_difference(self):
-        out = difference(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./difference.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_divide(self):
-        out = divide(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./divide.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_dodge(self):
-        out = dodge(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./dodge.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_grain_extract(self):
-        out = grain_extract(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./grain_extract.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_grain_merge(self):
-        out = grain_merge(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./grain_merge.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_hard_light(self):
-        out = hard_light(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./hard_light.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_lighten_only(self):
-        out = lighten_only(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./lighten_only.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_soft_light_50p(self):
-        out = soft_light(self.img_in, self.img_layer_50p, 0.8)
-        comp = cv2.imread('./soft_light_50p.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_overlay(self):
-        out = overlay(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./overlay.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_normal_50p(self):
-        out = normal(self.img_in, self.img_layer, 0.5)
-        comp = cv2.imread('./normal_50p.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
-
-    def test_normal_100p(self):
-        out = normal(self.img_in, self.img_layer, 1.0)
-        comp = cv2.imread('./normal_100p.png', -1).astype(float)
-        self.assertFalse(np.amax(np.absolute(out-comp)) > self.test_limit)
+@pytest.fixture
+def img_layer():
+    return cv2.imread('./layer.png', -1).astype(float)
 
 
-unittest.main()
+@pytest.fixture
+def img_layer_50p():
+    return cv2.imread('./layer_50p.png', -1).astype(float)
+
+
+def test_addition(img_in, img_layer):
+    out = soft_light(img_in, img_layer, 0.5)
+    comp = cv2.imread('./soft_light.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_darken_only(img_in, img_layer):
+    out = darken_only(img_in, img_layer, 0.5)
+    comp = cv2.imread('./darken_only.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_multiply(img_in, img_layer):
+    out = multiply(img_in, img_layer, 0.5)
+    comp = cv2.imread('./multiply.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_difference(img_in, img_layer):
+    out = difference(img_in, img_layer, 0.5)
+    comp = cv2.imread('./difference.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_divide(img_in, img_layer):
+    out = divide(img_in, img_layer, 0.5)
+    comp = cv2.imread('./divide.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_dodge(img_in, img_layer):
+    out = dodge(img_in, img_layer, 0.5)
+    comp = cv2.imread('./dodge.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_grain_extract(img_in, img_layer):
+    out = grain_extract(img_in, img_layer, 0.5)
+    comp = cv2.imread('./grain_extract.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_grain_merge(img_in, img_layer):
+    out = grain_merge(img_in, img_layer, 0.5)
+    comp = cv2.imread('./grain_merge.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_hard_light(img_in, img_layer):
+    out = hard_light(img_in, img_layer, 0.5)
+    comp = cv2.imread('./hard_light.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_lighten_only(img_in, img_layer):
+    out = lighten_only(img_in, img_layer, 0.5)
+    comp = cv2.imread('./lighten_only.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_soft_light_50p(img_in, img_layer_50p):
+    out = soft_light(img_in, img_layer_50p, 0.8)
+    comp = cv2.imread('./soft_light_50p.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_overlay(img_in, img_layer):
+    out = overlay(img_in, img_layer, 0.5)
+    comp = cv2.imread('./overlay.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_normal_50p(img_in, img_layer):
+    out = normal(img_in, img_layer, 0.5)
+    comp = cv2.imread('./normal_50p.png', -1).astype(float)
+    assert _test_criteria(out, comp)
+
+
+def test_normal_100p(img_in, img_layer):
+    out = normal(img_in, img_layer, 1.0)
+    comp = cv2.imread('./normal_100p.png', -1).astype(float)
+    assert _test_criteria(out, comp)
