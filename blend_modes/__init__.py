@@ -30,22 +30,22 @@ def normal(img_a, img_b, opacity):
 
     """
 
-    img_a = img_a / 255.0
-    img_b = img_b / 255.0
+    img_a_norm = img_a / 255.0
+    img_b_norm = img_b / 255.0
 
-    # Add alpha-channels, if they are not proviced
-    if img_a.shape[2] == 3:
-        img_a = np.dstack((img_a, np.zeros(img_a.shape[:2] + (3,))))
-    if img_b.shape[2] == 3:
-        img_b = np.dstack((img_b, np.zeros(img_b.shape[:2] + (3,))))
+    # Add alpha-channels, if they are not provided
+    if img_a_norm.shape[2] == 3:
+        img_a_norm = np.dstack((img_a_norm, np.zeros(img_a_norm.shape[:2] + (3,))))
+    if img_b_norm.shape[2] == 3:
+        img_b_norm = np.dstack((img_b_norm, np.zeros(img_b_norm.shape[:2] + (3,))))
 
     # Extract alpha-channels and apply opacity
-    img_a_alp = np.expand_dims(img_a[:, :, 3], 2) * opacity  # alpha of a, prepared for broadcasting
-    img_b_alp = np.expand_dims(img_b[:, :, 3], 2)  # alpha of b, prepared for broadcasting
+    img_a_alp = np.expand_dims(img_a_norm[:, :, 3], 2) * opacity  # alpha of a, prepared for broadcasting
+    img_b_alp = np.expand_dims(img_b_norm[:, :, 3], 2)  # alpha of b, prepared for broadcasting
 
     # Blend images
-    c_out = (img_a[:, :, :3] * img_a_alp + img_b[:, :, :3] * img_b_alp * (1 - img_a_alp)) \
-           / (img_a_alp + img_b_alp * (1 - img_a_alp))
+    c_out = (img_a_norm[:, :, :3] * img_a_alp + img_b_norm[:, :, :3] * img_b_alp * (1 - img_a_alp)) \
+            / (img_a_alp + img_b_alp * (1 - img_a_alp))
 
     # Blend alpha
     cout_alp = img_a_alp + img_b_alp * (1 - img_a_alp)
@@ -88,24 +88,24 @@ def soft_light(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
     # The following code does this:
-    #   multiply = img_in[:, :, :3]*img_layer[:, :, :3]
-    #   screen = 1.0 - (1.0-img_in[:, :, :3])*(1.0-img_layer[:, :, :3])
-    #   comp = (1.0 - img_in[:, :, :3]) * multiply + img_in[:, :, :3] * screen
+    #   multiply = img_in_norm[:, :, :3]*img_layer[:, :, :3]
+    #   screen = 1.0 - (1.0-img_in_norm[:, :, :3])*(1.0-img_layer[:, :, :3])
+    #   comp = (1.0 - img_in_norm[:, :, :3]) * multiply + img_in_norm[:, :, :3] * screen
     #   ratio_rs = np.reshape(np.repeat(ratio,3),comp.shape)
-    #   img_out = comp*ratio_rs + img_in[:, :, :3] * (1.0-ratio_rs)
+    #   img_out = comp*ratio_rs + img_in_norm[:, :, :3] * (1.0-ratio_rs)
 
-    comp = (1.0 - img_in[:, :, :3]) * img_in[:, :, :3] * img_layer[:, :, :3] \
-           + img_in[:, :, :3] * (1.0 - (1.0 - img_in[:, :, :3]) * (1.0 - img_layer[:, :, :3]))
+    comp = (1.0 - img_in_norm[:, :, :3]) * img_in_norm[:, :, :3] * img_layer_norm[:, :, :3] \
+           + img_in_norm[:, :, :3] * (1.0 - (1.0 - img_in_norm[:, :, :3]) * (1.0 - img_layer_norm[:, :, :3]))
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -141,16 +141,16 @@ def lighten_only(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = np.maximum(img_in[:, :, :3], img_layer[:, :, :3])
+    comp = np.maximum(img_in_norm[:, :, :3], img_layer_norm[:, :, :3])
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -186,16 +186,16 @@ def screen(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = 1.0 - (1.0 - img_in[:, :, :3]) * (1.0 - img_layer[:, :, :3])
+    comp = 1.0 - (1.0 - img_in_norm[:, :, :3]) * (1.0 - img_layer_norm[:, :, :3])
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -231,16 +231,16 @@ def dodge(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = np.minimum(img_in[:, :, :3] / (1.0 - img_layer[:, :, :3]), 1.0)
+    comp = np.minimum(img_in_norm[:, :, :3] / (1.0 - img_layer_norm[:, :, :3]), 1.0)
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -276,16 +276,16 @@ def addition(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = img_in[:, :, :3] + img_layer[:, :, :3]
+    comp = img_in_norm[:, :, :3] + img_layer_norm[:, :, :3]
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = np.clip(comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs), 0.0, 1.0)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = np.clip(comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs), 0.0, 1.0)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -321,16 +321,16 @@ def darken_only(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = np.minimum(img_in[:, :, :3], img_layer[:, :, :3])
+    comp = np.minimum(img_in_norm[:, :, :3], img_layer_norm[:, :, :3])
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -366,16 +366,16 @@ def multiply(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = np.clip(img_layer[:, :, :3] * img_in[:, :, :3], 0.0, 1.0)
+    comp = np.clip(img_layer_norm[:, :, :3] * img_in_norm[:, :, :3], 0.0, 1.0)
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -411,19 +411,20 @@ def hard_light(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = np.greater(img_layer[:, :, :3], 0.5) * np.minimum(1.0 - ((1.0 - img_in[:, :, :3])
-                                                                    * (1.0 - (img_layer[:, :, :3] - 0.5) * 2.0)), 1.0) \
-           + np.logical_not(np.greater(img_layer[:, :, :3], 0.5)) * np.minimum(img_in[:, :, :3]
-                                                                               * (img_layer[:, :, :3] * 2.0), 1.0)
+    comp = np.greater(img_layer_norm[:, :, :3], 0.5) \
+           * np.minimum(1.0 - ((1.0 - img_in_norm[:, :, :3])
+           * (1.0 - (img_layer_norm[:, :, :3] - 0.5) * 2.0)), 1.0) \
+           + np.logical_not(np.greater(img_layer_norm[:, :, :3], 0.5)) \
+           * np.minimum(img_in_norm[:, :, :3] * (img_layer_norm[:, :, :3] * 2.0), 1.0)
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -459,17 +460,17 @@ def difference(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = img_in[:, :, :3] - img_layer[:, :, :3]
+    comp = img_in_norm[:, :, :3] - img_layer_norm[:, :, :3]
     comp[comp < 0.0] *= -1.0
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -505,16 +506,16 @@ def subtract(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = img_in[:, :, :3] - img_layer[:, :, :3]
+    comp = img_in[:, :, :3] - img_layer_norm[:, :, :3]
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = np.clip(comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs), 0.0, 1.0)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = np.clip(comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs), 0.0, 1.0)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -550,16 +551,16 @@ def grain_extract(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = np.clip(img_in[:, :, :3] - img_layer[:, :, :3] + 0.5, 0.0, 1.0)
+    comp = np.clip(img_in_norm[:, :, :3] - img_layer_norm[:, :, :3] + 0.5, 0.0, 1.0)
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -595,16 +596,16 @@ def grain_merge(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = np.clip(img_in[:, :, :3] + img_layer[:, :, :3] - 0.5, 0.0, 1.0)
+    comp = np.clip(img_in_norm[:, :, :3] + img_layer_norm[:, :, :3] - 0.5, 0.0, 1.0)
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -640,16 +641,16 @@ def divide(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = np.minimum((256.0 / 255.0 * img_in[:, :, :3]) / (1.0 / 255.0 + img_layer[:, :, :3]), 1.0)
+    comp = np.minimum((256.0 / 255.0 * img_in_norm[:, :, :3]) / (1.0 / 255.0 + img_layer_norm[:, :, :3]), 1.0)
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
@@ -689,18 +690,18 @@ def overlay(img_in, img_layer, opacity):
     assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
     assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
 
-    img_in /= 255.0
-    img_layer /= 255.0
+    img_in_norm = img_in/255.0
+    img_layer_norm = img_layer/255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = np.less(img_in[:, :, :3], 0.5) * (2 * img_in[:, :, :3] * img_layer[:, :, :3]) \
-           + np.greater_equal(img_in[:, :, :3], 0.5) \
-           * (1 - (2 * (1 - img_in[:, :, :3]) * (1 - img_layer[:, :, :3])))
+    comp = np.less(img_in_norm[:, :, :3], 0.5) * (2 * img_in_norm[:, :, :3] * img_layer_norm[:, :, :3]) \
+           + np.greater_equal(img_in_norm[:, :, :3], 0.5) \
+           * (1 - (2 * (1 - img_in_norm[:, :, :3]) * (1 - img_layer_norm[:, :, :3])))
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
 
 
