@@ -83,7 +83,7 @@ def _assert_opacity(opacity, fcn_name: str, arg_name: str = 'opacity'):
         raise TypeError(err_msg)
 
     if not 0.0 <= opacity <= 1.0:
-        err_msg = 'The blend_modes function "{fcn_name}" received the value "{val}" for its argument "{arg_name)". ' \
+        err_msg = 'The blend_modes function "{fcn_name}" received the value "{val}" for its argument "{arg_name}". ' \
                   'The function however expects that the value for "{arg_name}" is inside the range 0.0 <= x <= 1.0. ' \
                   'Please pass a variable in that range to the "{arg_name}" argument of function "{fcn_name}".' \
             .format(fcn_name=fcn_name, arg_name=arg_name, val=str(opacity))
