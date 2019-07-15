@@ -134,7 +134,7 @@ The Blend Modes package needs [Numpy](https://pypi.python.org/pypi/numpy) to fun
 
 See Also
 --------
-Blend modes are further described on [Wikipedia](https://en.wikipedia.org/wiki/Blend_modes). An actual implementation can be found in the [GIMP source code](https://git.gnome.org/browse/gimp/tree/app/operations/), e.g. in the file that describes the *division* operation, [gimpoperationdividecode.c](https://git.gnome.org/browse/gimp/tree/app/operations/gimpoperationdividemode.c).
+Blend modes are further described on [Wikipedia](https://en.wikipedia.org/wiki/Blend_modes). An actual implementation can be found in the [GIMP source code](https://gitlab.gnome.org/GNOME/gimp/blob/master/app/operations/layer-modes-legacy/gimpoperationdividelegacy.c).
 
 Contribution
 ------------

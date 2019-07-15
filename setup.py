@@ -29,6 +29,7 @@ setup(
     # Choose your license
     license='MIT',
     packages=["blend_modes"],
+
     # See https://PyPI.python.org/PyPI?%3Aaction=list_classifiers
     classifiers=[
         # How mature is this project? Common values are
@@ -54,5 +55,7 @@ setup(
     keywords='image processing blend modes',
 
     install_requires=['numpy'],
+
+    tests_require=['pytest', 'opencv-python']
 
 )
