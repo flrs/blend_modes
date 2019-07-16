@@ -1,4 +1,4 @@
-"""This module contains code for testing the package
+"""This module contains code for testing the blend_modes package
 """
 import cv2
 import pytest
