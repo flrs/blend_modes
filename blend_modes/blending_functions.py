@@ -1,4 +1,31 @@
-"""This Python package implements blend modes for images.
+"""
+.. module:: blend_modes
+
+This Python package implements blend modes for images
+
+Note:
+    This page shows some visual examples of the blending modes.
+
+    All examples are blends of two images: As a bottom layer, there is a rainbow-filled square with
+    some transparent border on the right and bottom edges. The top layer is a small rectangle that is
+    filled with a colorful circular gradient. The top layer is blended upon the bottom layer with 50%
+    transparency in all of the examples below.
+
+    .. |logo1| image:: ../tests/orig.png
+        :scale: 30%
+
+    .. |logo2| image:: ../tests/layer.png
+        :scale: 30%
+
+
+    .. table:: Bottom and top layers for blending examples
+       :align: center
+
+       +---------+---------+
+       | |logo1| | |logo2| |
+       +---------+---------+
+
+
 """
 import numpy as np
 
@@ -20,17 +47,22 @@ def _compose_alpha(img_in, img_layer, opacity):
 def normal(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply "normal" blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/wiki/Alpha_compositing#Description>`__.
+    Example:
+        .. image:: ../tests/normal_50p.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import normal
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = normal(img_in,img_layer,0.8)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import normal
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = normal(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on `Wikipedia <https://en.wikipedia.org/wiki/Alpha_compositing#Description>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0): Layer to be blended with image
@@ -81,17 +113,23 @@ def normal(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def soft_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply soft light blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Soft_Light>`__.
+    Example:
+        .. image:: ../tests/soft_light.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import soft_light
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = soft_light(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import soft_light
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = soft_light(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Soft_Light>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -136,17 +174,23 @@ def soft_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def lighten_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply lighten only blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Lighten_Only>`__.
+    Example:
+        .. image:: ../tests/lighten_only.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import lighten_only
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = lighten_only(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import lighten_only
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = lighten_only(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Lighten_Only>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -183,17 +227,23 @@ def lighten_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def screen(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply screen blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Screen>`__.
+    Example:
+        .. image:: ../tests/screen.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import screen
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = screen(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import screen
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = screen(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Screen>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -230,17 +280,23 @@ def screen(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def dodge(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply dodge blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Dodge_and_burn>`__.
+    Example:
+        .. image:: ../tests/dodge.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import dodge
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = dodge(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import dodge
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = dodge(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Dodge_and_burn>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -277,17 +333,23 @@ def dodge(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def addition(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply addition blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Addition>`__.
+    Example:
+        .. image:: ../tests/addition.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import addition
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = addition(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import addition
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = addition(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Addition>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -324,17 +386,23 @@ def addition(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def darken_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply darken only blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Darken_Only>`__.
+    Example:
+        .. image:: ../tests/darken_only.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import darken_only
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = darken_only(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import darken_only
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = darken_only(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Darken_Only>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -371,17 +439,23 @@ def darken_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def multiply(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply multiply blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Multiply>`__.
+    Example:
+        .. image:: ../tests/multiply.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import multiply
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = multiply(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import multiply
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = multiply(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Multiply>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -418,17 +492,23 @@ def multiply(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def hard_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply hard light blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Hard_Light>`__.
+    Example:
+        .. image:: ../tests/hard_light.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import hard_light
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = hard_light(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import hard_light
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = hard_light(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Hard_Light>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -469,17 +549,23 @@ def hard_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def difference(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply difference blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Difference>`__.
+    Example:
+        .. image:: ../tests/difference.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import difference
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = difference(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import difference
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = difference(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Difference>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -517,17 +603,23 @@ def difference(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def subtract(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply subtract blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Subtract>`__.
+    Example:
+        .. image:: ../tests/subtract.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import subtract
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = subtract(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import subtract
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = subtract(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Subtract>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -564,17 +656,22 @@ def subtract(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def grain_extract(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply grain extract blending mode of a layer on an image.
 
-    Find more information on the `KDE UserBase Wiki <https://userbase.kde.org/Krita/Manual/Blendingmodes#Grain_Extract>`__.
+    Example:
+        .. image:: ../tests/grain_extract.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import grain_extract
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = grain_extract(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import grain_extract
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = grain_extract(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information in the `GIMP Documentation <https://docs.gimp.org/en/gimp-concepts-layer-modes.html>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -611,17 +708,22 @@ def grain_extract(img_in, img_layer, opacity, disable_type_checks: bool = False)
 def grain_merge(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply grain merge blending mode of a layer on an image.
 
-    Find more information on the `KDE UserBase Wiki <https://userbase.kde.org/Krita/Manual/Blendingmodes#Grain_Merge>`__.
+    Example:
+        .. image:: ../tests/grain_merge.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import grain_merge
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = grain_merge(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import grain_merge
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = grain_merge(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information in the `GIMP Documentation <https://docs.gimp.org/en/gimp-concepts-layer-modes.html>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -658,17 +760,23 @@ def grain_merge(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def divide(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply divide blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Divide>`__.
+    Example:
+        .. image:: ../tests/divide.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import divide
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = divide(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import divide
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = divide(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Divide>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
@@ -705,21 +813,28 @@ def divide(img_in, img_layer, opacity, disable_type_checks: bool = False):
 def overlay(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply overlay blending mode of a layer on an image.
 
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=868545948#Overlay>`__.
+    Note:
+        The implementation of this method was changed in version 2.0.0. Previously, it would be identical to the
+        soft light blending mode. Now, it resembles the implementation on Wikipedia. You can still use the soft light
+        blending mode if you are looking for backwards compatibility.
 
-    .. note:: The implementation of this method was changed in version 2.0.0. Previously, it would be identical to the
-              soft light blending mode. Now, it resembles the implementation on Wikipedia. You can still use the soft light
-              blending mode if you are looking for backwards compatibility.
+    Example:
+        .. image:: ../tests/overlay.png
+            :width: 30%
 
-    Example::
+        ::
 
-        import cv2, numpy
-        from blend_modes import overlay
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = overlay(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
+            import cv2, numpy
+            from blend_modes import overlay
+            img_in = cv2.imread('./orig.png', -1).astype(float)
+            img_layer = cv2.imread('./layer.png', -1).astype(float)
+            img_out = overlay(img_in,img_layer,0.5)
+            cv2.imshow('window', img_out.astype(numpy.uint8))
+            cv2.waitKey()
+
+    See Also:
+        Find more information on
+        `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=868545948#Overlay>`__.
 
     Args:
       img_in(3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0): Image to be blended upon
