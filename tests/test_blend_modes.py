@@ -4,7 +4,7 @@ import cv2
 import pytest
 
 from blend_modes import *
-from blend_modes import _assert_opacity, _assert_image_format
+from blend_modes.type_checks import assert_opacity, assert_image_format
 
 _TEST_LIMIT = 10  # test fails if max. image color difference is > test_limit
 _TEST_TOLERANCE = 0.001  # max. ratio of RGBA pixels that may not match test criteria
@@ -115,45 +115,45 @@ def test_normal_100p(img_in, img_layer):
 
 def test_assert_image_format_dims_force_alpha():
     with pytest.raises(TypeError):
-        _assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640, 3]), fcn_name='', arg_name='',
+        assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640, 3]), fcn_name='', arg_name='',
                              force_alpha=True)
 
 
 def test_assert_image_format_dims_not_force_alpha():
-    _assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640, 3]), fcn_name='', arg_name='', force_alpha=False)
+    assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640, 3]), fcn_name='', arg_name='', force_alpha=False)
 
 
 def test_assert_image_format_dims():
     with pytest.raises(TypeError):
-        _assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640, 2]), fcn_name='', arg_name='')
+        assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640, 2]), fcn_name='', arg_name='')
 
 
 def test_assert_image_format_shape():
     with pytest.raises(TypeError):
-        _assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640]), fcn_name='', arg_name='')
+        assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640]), fcn_name='', arg_name='')
 
 
 def test_assert_image_format_kind():
     with pytest.raises(TypeError):
-        _assert_image_format(np.ndarray(dtype=int, shape=[640, 640, 4]), fcn_name='', arg_name='')
+        assert_image_format(np.ndarray(dtype=int, shape=[640, 640, 4]), fcn_name='', arg_name='')
 
 
 def test_assert_image_format_type():
     with pytest.raises(TypeError):
-        _assert_image_format(2.0, fcn_name='', arg_name='')
+        assert_image_format(2.0, fcn_name='', arg_name='')
 
 
 def test_assert_opacity_wrong_variable_type():
     opacity = '0.5'
     with pytest.raises(TypeError):
-        assert _assert_opacity(opacity, '')
+        assert assert_opacity(opacity, '')
 
 
 def test_assert_opacity_right_variable_type():
-    _assert_opacity(0.5, '')
+    assert_opacity(0.5, '')
 
 
 @pytest.mark.parametrize('opacity', [-5.0, 1.01])
 def test_assert_opacity_wrong_variable_range(opacity):
     with pytest.raises(ValueError):
-        assert _assert_opacity(opacity, '')
+        assert assert_opacity(opacity, '')
