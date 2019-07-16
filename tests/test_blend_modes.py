@@ -1,3 +1,5 @@
+"""This module contains code for testing the package
+"""
 import cv2
 import pytest
 
