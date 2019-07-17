@@ -118,6 +118,10 @@ cv2.imshow('window', blended_img_uint8)
 cv2.waitKey()  # Press a key to close window with the image.
 ```
 
+Documentation
+-------------
+Full documentation for the latest version of this package is available on [Read the Docs](https://blend-modes.readthedocs.io/en/latest/).
+
 Installation
 ------------
 The Blend Modes package can be installed through pip:
