@@ -30,5 +30,6 @@ steps:
 
 - script: |
     pip install pytest pytest-azurepipelines
+    pip install opencv-python
     pytest
   displayName: 'pytest'
