@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.0.2] - 2019-07-16
+### Added
+- Added images in blending function documentation
+
+### Changed
+- Refactored internal package structure, splitting type checks and image blending functions into separate modules
+- Improved error messages for type checks to be more user-friendly
+- Improved visual example gallery in documentation
+- Ported tests from unittest framework to pytest framework
+- Updated links in readme file
+
+### Fixed
+- Image blending functions no longer modify their inputs
+
 ## [2.0.1] - 2019-03-09
 ### Fixed
 - Bug fix in setup.py for package creation
