@@ -1,12 +1,36 @@
 """
 .. module:: blend_modes
 
-This Python package implements blend modes for images
+This page documents all function available in blend_modes in detail. If this documentation cannot answer your questions,
+please raise an issue on `blend_modes' GitHub page <https://github.com/flrs/blend_modes/issues>`__.
+
+Overview
+--------
+
+.. currentmodule:: blend_modes.blending_functions
+
+.. autosummary::
+    :nosignatures:
+
+    addition
+    darken_only
+    difference
+    divide
+    dodge
+    grain_extract
+    grain_merge
+    hard_light
+    lighten_only
+    multiply
+    normal
+    overlay
+    screen
+    soft_light
+    subtract
+
 
 Note:
-    This page shows some visual examples of the blending modes.
-
-    All examples are blends of two images: As a bottom layer, there is a rainbow-filled square with
+    All examples on this page are blends of two images: As a bottom layer, there is a rainbow-filled square with
     some transparent border on the right and bottom edges. The top layer is a small rectangle that is
     filled with a colorful circular gradient. The top layer is blended upon the bottom layer with 50%
     transparency in all of the examples below.
@@ -25,6 +49,8 @@ Note:
        | |logo1| | |logo2| |
        +---------+---------+
 
+Detailed Documentation
+----------------------
 
 """
 import numpy as np
