@@ -2,12 +2,18 @@
 """
 import cv2
 import pytest
+import os
 
 from blend_modes import *
 from blend_modes.type_checks import assert_opacity, assert_image_format
 
 _TEST_LIMIT = 10  # test fails if max. image color difference is > test_limit
 _TEST_TOLERANCE = 0.001  # max. ratio of RGBA pixels that may not match test criteria
+
+# Change current directory to directory of this test file so relative paths work
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 
 def _test_criteria(out, comp):
