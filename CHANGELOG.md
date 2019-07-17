@@ -1,11 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [2.0.3] - 2019-07-16
+## [2.1.0] - 2019-07-16
 ### Added
 - Added images in blending function documentation
 
 ### Changed
+- Dropped support for Python versions < 3.5
 - Refactored internal package structure, splitting type checks and image blending functions into separate modules
 - Improved error messages for type checks to be more user-friendly
 - Improved visual example gallery in documentation
