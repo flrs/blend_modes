@@ -1,5 +1,6 @@
 [![PyPI version](https://badge.fury.io/py/blend-modes.svg)](https://badge.fury.io/py/blend-modes)
 [![Documentation Status](https://readthedocs.org/projects/blend-modes/badge/?version=latest)](https://blend-modes.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://dev.azure.com/florianroscheck/blend_modes/_apis/build/status/flrs.blend_modes?branchName=master)](https://dev.azure.com/florianroscheck/blend_modes/_build/latest?definitionId=1&branchName=master)
 
 Blend Modes
 ===========
