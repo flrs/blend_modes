@@ -161,7 +161,8 @@ Installation
 ------------
 
 The Blend Modes package can be installed through pip:
-``$ pip install blend_modes``
+
+``pip install blend_modes``
 
 Dependencies
 ------------
@@ -180,9 +181,7 @@ See Also
 Blend modes are further described on
 `Wikipedia <https://en.wikipedia.org/wiki/Blend_modes>`__. An actual
 implementation can be found in the `GIMP source
-code <https://git.gnome.org/browse/gimp/tree/app/operations/>`__, e.g.
-in the file that describes the *division* operation,
-`gimpoperationdividecode.c <https://git.gnome.org/browse/gimp/tree/app/operations/gimpoperationdividemode.c>`__.
+code <https://gitlab.gnome.org/GNOME/gimp/blob/master/app/operations/layer-modes-legacy/gimpoperationdividelegacy.c>`__.
 
 Contribution
 ------------
