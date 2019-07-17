@@ -22,14 +22,13 @@ steps:
   inputs:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
-
-- task: DownloadGitHubRelease@0
+    
+- task: PowerShell@2
   inputs:
-    connection: 'flrs_github'
-    userRepository: 'flrs/blend_modes'
-    defaultVersionType: 'latest'
-    itemPattern: '*'
-    downloadPath: '$(System.ArtifactsDirectory)'
+    targetType: 'inline'
+    script: |
+      cd $(System.ArtifactsDirectory)
+      git clone --branch master https://github.com/flrs/blend_modes.git
 
 - script: |
     python -m pip install --upgrade pip
