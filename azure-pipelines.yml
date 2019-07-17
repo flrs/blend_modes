@@ -25,8 +25,8 @@ steps:
 
 - script: |
     python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+    pip install -e ./
+  displayName: 'Install blend_modes package'
 
 - task: PowerShell@2
   inputs:
