@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [2.0.2] - 2019-07-16
+## [2.0.3] - 2019-07-16
 ### Added
 - Added images in blending function documentation
 
@@ -14,6 +14,10 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Image blending functions no longer modify their inputs
+
+## [2.0.2] - 2019-04-17
+### Fixed
+- Fixed bug where it would not be possible to import the package
 
 ## [2.0.1] - 2019-03-09
 ### Fixed
