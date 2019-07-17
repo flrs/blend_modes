@@ -28,6 +28,7 @@ steps:
     connection: 'flrs_github'
     userRepository: 'flrs/blend_modes'
     defaultVersionType: 'latest'
+    itemPattern: '*'
     downloadPath: '$(System.ArtifactsDirectory)'
 
 - script: |
