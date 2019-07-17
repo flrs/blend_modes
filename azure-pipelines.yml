@@ -23,10 +23,16 @@ steps:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
 
+- task: DownloadGitHubRelease@0
+  inputs:
+    connection: 'flrs_github'
+    userRepository: 'flrs/blend_modes'
+    defaultVersionType: 'latest'
+    downloadPath: '$(System.ArtifactsDirectory)'
+
 - script: |
     python -m pip install --upgrade pip
-    pip install blend_modes
-    pip install -r requirements.txt
+    pip install -r $(System.ArtifactsDirectory)/requirements.txt
   displayName: 'Install dependencies'
 
 - script: |
