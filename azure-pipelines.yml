@@ -22,21 +22,21 @@ steps:
   inputs:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
-    
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
-      cd $(System.ArtifactsDirectory)
-      git clone --branch master https://github.com/flrs/blend_modes.git
-
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r $(System.ArtifactsDirectory)/requirements.txt
-  displayName: 'Install dependencies'
+      ls -a
 
 - script: |
     pip install pytest pytest-azurepipelines
     pip install opencv-python
+    cd ./tests
     pytest
   displayName: 'pytest'
