@@ -1,5 +1,5 @@
 [![PyPI version](https://badge.fury.io/py/blend-modes.svg)](https://badge.fury.io/py/blend-modes)
-[![Conda-forge version](https://img.shields.io/conda/vn/conda-forge/blend_modes.svg)](https://img.shields.io/conda/vn/conda-forge/blend_modes.svg)
+[![Conda-forge version](https://img.shields.io/conda/vn/conda-forge/blend_modes.svg)](https://anaconda.org/conda-forge/blend_modes)
 [![Documentation Status](https://readthedocs.org/projects/blend-modes/badge/?version=latest)](https://blend-modes.readthedocs.io/en/latest/?badge=latest)
 [![Build Status](https://dev.azure.com/florianroscheck/blend_modes/_apis/build/status/flrs.blend_modes?branchName=master)](https://dev.azure.com/florianroscheck/blend_modes/_build/latest?definitionId=1&branchName=master)
 
@@ -31,6 +31,16 @@ Blending through blend modes allows to mix images in a variety of ways. This pac
 The intensity of blending can be controlled by means of an *opacity* parameter that is passed into the functions. See [Usage](#usage) for more information.
 
 The Blend Modes package is optimized for speed. It takes advantage of vectorization through Numpy. Further speedup can be achieved when implementing the package in Cython. However, Cython implementation is not part of this package.
+
+Installation
+------------
+The Blend Modes package can be installed through pip:
+
+```pip install blend_modes```
+
+or conda:
+
+```conda install -c conda-forge blend_modes```
 
 Usage
 -----
@@ -123,12 +133,6 @@ cv2.waitKey()  # Press a key to close window with the image.
 Documentation
 -------------
 Full documentation for the latest version of this package is available on [Read the Docs](https://blend-modes.readthedocs.io/en/latest/).
-
-Installation
-------------
-The Blend Modes package can be installed through pip:
-
-```pip install blend_modes```
 
 Dependencies
 ------------
