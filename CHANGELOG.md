@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.1.1] - 2019-11-14
+### Fixed
+- Fixed error where alpha composition calculation would return NaNs
+
 ## [2.1.0] - 2019-07-16
 ### Added
 - Added images in blending function documentation
