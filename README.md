@@ -7,6 +7,8 @@ Blend Modes
 ===========
 This Python package implements blend modes for images.
 
+**⚠️ This project is no longer maintained. Are you interested in maintaining it? Please file let us know [here](https://github.com/flrs/blend_modes/issues/28). ⚠️**
+
 Description
 -----------
 The Blend Modes package enables blending different images, or image layers, by means of blend modes. These modes are commonly found in graphics programs like [Adobe Photoshop](http://www.adobe.com/Photoshop) or [GIMP](https://www.gimp.org/).
