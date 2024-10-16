@@ -121,22 +121,22 @@ def test_normal_100p(img_in, img_layer):
 
 def test_assert_image_format_dims_force_alpha():
     with pytest.raises(TypeError):
-        assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640, 3]), fcn_name='', arg_name='',
+        assert_image_format(np.ndarray(dtype=float, shape=[640, 640, 3]), fcn_name='', arg_name='',
                              force_alpha=True)
 
 
 def test_assert_image_format_dims_not_force_alpha():
-    assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640, 3]), fcn_name='', arg_name='', force_alpha=False)
+    assert_image_format(np.ndarray(dtype=float, shape=[640, 640, 3]), fcn_name='', arg_name='', force_alpha=False)
 
 
 def test_assert_image_format_dims():
     with pytest.raises(TypeError):
-        assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640, 2]), fcn_name='', arg_name='')
+        assert_image_format(np.ndarray(dtype=float, shape=[640, 640, 2]), fcn_name='', arg_name='')
 
 
 def test_assert_image_format_shape():
     with pytest.raises(TypeError):
-        assert_image_format(np.ndarray(dtype=np.float, shape=[640, 640]), fcn_name='', arg_name='')
+        assert_image_format(np.ndarray(dtype=float, shape=[640, 640]), fcn_name='', arg_name='')
 
 
 def test_assert_image_format_kind():
