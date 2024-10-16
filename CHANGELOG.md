@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2024-10-17
+### Changed
+- Removed tests of Python versions < 3.8
+
+### Fixed
+- Fixed outdated comparison of Numpy nans
+- Fixed tests that used deprecated np.float
+
 ## [2.1.0] - 2019-07-16
 ### Added
 - Added images in blending function documentation
