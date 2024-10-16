@@ -66,7 +66,7 @@ def _compose_alpha(img_in, img_layer, opacity):
     new_alpha = img_in[:, :, 3] + (1.0 - img_in[:, :, 3]) * comp_alpha
     np.seterr(divide='ignore', invalid='ignore')
     ratio = comp_alpha / new_alpha
-    ratio[ratio == np.NAN] = 0.0
+    ratio[np.isnan(ratio)] = 0.0
     return ratio
 
 
