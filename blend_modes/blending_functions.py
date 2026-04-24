@@ -58,6 +58,24 @@ import numpy as np
 from blend_modes.type_checks import assert_image_format, assert_opacity
 
 
+def _ensure_rgba(img):
+    """Convert RGB image to RGBA by adding full-opacity alpha channel.
+
+    If image already has 4 channels, return as-is.
+    If image has 3 channels, add alpha channel with value 255.
+    Otherwise raise ValueError.
+    """
+    if img.ndim != 3:
+        raise ValueError(f"Expected 3D array (H, W, C), got {img.ndim}D array")
+    if img.shape[2] == 4:
+        return img
+    elif img.shape[2] == 3:
+        alpha = np.full((*img.shape[:2], 1), 255, dtype=img.dtype)
+        return np.dstack((img, alpha))
+    else:
+        raise ValueError(f"Expected 3 or 4 channels, got {img.shape[2]}")
+
+
 def _compose_alpha(img_in, img_layer, opacity):
     """Calculate alpha composition ratio between two images.
     """
@@ -108,14 +126,11 @@ def normal(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_layer, _fcn_name, 'img_layer', force_alpha=False)
         assert_opacity(opacity, _fcn_name)
 
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
-
-    # Add alpha-channels, if they are not provided
-    if img_in_norm.shape[2] == 3:
-        img_in_norm = np.dstack((img_in_norm, np.zeros(img_in_norm.shape[:2] + (3,))))
-    if img_layer_norm.shape[2] == 3:
-        img_layer_norm = np.dstack((img_layer_norm, np.zeros(img_layer_norm.shape[:2] + (3,))))
 
     # Extract alpha-channels and apply opacity
     img_in_alp = np.expand_dims(img_in_norm[:, :, 3], 2)  # alpha of b, prepared for broadcasting
@@ -169,24 +184,19 @@ def soft_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
-
     if not disable_type_checks:
         _fcn_name = 'soft_light'
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
 
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
     ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
-    # The following code does this:
-    #   multiply = img_in_norm[:, :, :3]*img_layer[:, :, :3]
-    #   screen = 1.0 - (1.0-img_in_norm[:, :, :3])*(1.0-img_layer[:, :, :3])
-    #   comp = (1.0 - img_in_norm[:, :, :3]) * multiply + img_in_norm[:, :, :3] * screen
-    #   ratio_rs = np.reshape(np.repeat(ratio,3),comp.shape)
-    #   img_out = comp*ratio_rs + img_in_norm[:, :, :3] * (1.0-ratio_rs)
 
     comp = (1.0 - img_in_norm[:, :, :3]) * img_in_norm[:, :, :3] * img_layer_norm[:, :, :3] \
            + img_in_norm[:, :, :3] * (1.0 - (1.0 - img_in_norm[:, :, :3]) * (1.0 - img_layer_norm[:, :, :3]))
@@ -230,6 +240,8 @@ def lighten_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'lighten_only'
@@ -283,6 +295,8 @@ def screen(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'screen'
@@ -336,6 +350,8 @@ def dodge(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'dodge'
@@ -389,6 +405,8 @@ def addition(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'addition'
@@ -442,6 +460,8 @@ def darken_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'darken_only'
@@ -495,6 +515,8 @@ def multiply(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'multiply'
@@ -548,6 +570,8 @@ def hard_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'hard_light'
@@ -605,6 +629,8 @@ def difference(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'difference'
@@ -659,6 +685,8 @@ def subtract(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'subtract'
@@ -711,6 +739,8 @@ def grain_extract(img_in, img_layer, opacity, disable_type_checks: bool = False)
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'grain_extract'
@@ -763,6 +793,8 @@ def grain_merge(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'grain_merge'
@@ -816,6 +848,8 @@ def divide(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'divide'
@@ -874,6 +908,8 @@ def overlay(img_in, img_layer, opacity, disable_type_checks: bool = False):
       3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0: Blended image
 
     """
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     if not disable_type_checks:
         _fcn_name = 'overlay'

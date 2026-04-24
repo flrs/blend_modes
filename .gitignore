@@ -1,1 +1,3 @@
-docs/_build/
+venv/
+__pycache__/
+*.pyc
