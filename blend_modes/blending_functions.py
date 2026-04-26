@@ -27,6 +27,12 @@ Overview
     screen
     soft_light
     subtract
+    color_burn
+    linear_burn
+    exclusion
+    vivid_light
+    linear_light
+    pin_light
 
 
 Note:
@@ -57,6 +63,18 @@ import numpy as np
 
 from blend_modes.type_checks import assert_image_format, assert_opacity
 
+def _ensure_rgba(img):
+    """Convert RGB image to RGBA by adding full-opacity alpha channel."""
+    if img.ndim != 3:
+        raise ValueError(f"Expected 3D array (H, W, C), got {img.ndim}D array")
+
+    if img.shape[2] == 4:
+        return img
+    elif img.shape[2] == 3:
+        alpha = np.full((*img.shape[:2], 1), 255, dtype=img.dtype)
+        return np.dstack((img, alpha))
+    else:
+        raise ValueError(f"Expected 3 or 4 channels, got {img.shape[2]}")
 
 def _compose_alpha(img_in, img_layer, opacity):
     """Calculate alpha composition ratio between two images.
@@ -108,14 +126,13 @@ def normal(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_layer, _fcn_name, 'img_layer', force_alpha=False)
         assert_opacity(opacity, _fcn_name)
 
+    # Add alpha-channels, if they are not provided
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
-
-    # Add alpha-channels, if they are not provided
-    if img_in_norm.shape[2] == 3:
-        img_in_norm = np.dstack((img_in_norm, np.zeros(img_in_norm.shape[:2] + (3,))))
-    if img_layer_norm.shape[2] == 3:
-        img_layer_norm = np.dstack((img_layer_norm, np.zeros(img_layer_norm.shape[:2] + (3,))))
+    
 
     # Extract alpha-channels and apply opacity
     img_in_alp = np.expand_dims(img_in_norm[:, :, 3], 2)  # alpha of b, prepared for broadcasting
@@ -175,6 +192,9 @@ def soft_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -236,6 +256,9 @@ def lighten_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -289,6 +312,9 @@ def screen(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -342,6 +368,9 @@ def dodge(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -395,6 +424,9 @@ def addition(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -448,6 +480,9 @@ def darken_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -502,6 +537,9 @@ def multiply(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
 
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
@@ -554,6 +592,9 @@ def hard_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -611,6 +652,9 @@ def difference(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -666,12 +710,15 @@ def subtract(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
 
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
     ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
 
-    comp = img_in[:, :, :3] - img_layer_norm[:, :, :3]
+    comp = img_in_norm[:, :, :3] - img_layer_norm[:, :, :3]
 
     ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
     img_out = np.clip(comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs), 0.0, 1.0)
@@ -717,6 +764,9 @@ def grain_extract(img_in, img_layer, opacity, disable_type_checks: bool = False)
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+ 
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -770,6 +820,9 @@ def grain_merge(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
 
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
@@ -822,6 +875,9 @@ def divide(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -880,6 +936,9 @@ def overlay(img_in, img_layer, opacity, disable_type_checks: bool = False):
         assert_image_format(img_in, _fcn_name, 'img_in')
         assert_image_format(img_layer, _fcn_name, 'img_layer')
         assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
 
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
@@ -894,3 +953,161 @@ def overlay(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
     img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
     return img_out * 255.0
+
+def linear_burn(img_in, img_layer, opacity, disable_type_checks: bool = False):
+    """Apply linear burn blending mode."""
+
+    if not disable_type_checks:
+        _fcn_name = 'linear_burn'
+        assert_image_format(img_in, _fcn_name, 'img_in')
+        assert_image_format(img_layer, _fcn_name, 'img_layer')
+        assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
+    img_in_norm = img_in / 255.0
+    img_layer_norm = img_layer / 255.0
+
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
+
+    # 🔥 Core formula
+    comp = np.clip(img_in_norm[:, :, :3] + img_layer_norm[:, :, :3] - 1.0, 0.0, 1.0)
+
+    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
+
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))
+
+    return img_out * 255.0
+
+def color_burn(img_in, img_layer, opacity, disable_type_checks: bool = False):
+    """Apply color burn blending mode."""
+
+    if not disable_type_checks:
+        _fcn_name = 'color_burn'
+        assert_image_format(img_in, _fcn_name, 'img_in')
+        assert_image_format(img_layer, _fcn_name, 'img_layer')
+        assert_opacity(opacity, _fcn_name)
+
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)   
+
+    img_in_norm = img_in / 255.0
+    img_layer_norm = img_layer / 255.0
+
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
+
+    comp = np.clip(
+    1.0 - np.minimum(1.0, (1.0 - img_in_norm[:, :, :3]) / (img_layer_norm[:, :, :3] + 1e-6)),
+    0.0, 1.0
+)
+
+    ratio_rs = np.reshape(np.repeat(ratio, 3), comp.shape)
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+
+    return np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3]))) * 255.0
+
+def exclusion(img_in, img_layer, opacity, disable_type_checks: bool = False):
+    """Apply exclusion blending mode."""
+
+    if not disable_type_checks:
+        _fcn_name = 'exclusion'
+        assert_image_format(img_in, _fcn_name, 'img_in')
+        assert_image_format(img_layer, _fcn_name, 'img_layer')
+        assert_opacity(opacity, _fcn_name)
+ 
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
+    img_in_norm = img_in / 255.0
+    img_layer_norm = img_layer / 255.0
+
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
+
+    comp = img_in_norm[:, :, :3] + img_layer_norm[:, :, :3] - 2 * img_in_norm[:, :, :3] * img_layer_norm[:, :, :3]
+
+    ratio_rs = np.reshape(np.repeat(ratio, 3), comp.shape)
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+
+    return np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3]))) * 255.0
+
+def linear_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
+    """Apply linear_light blending mode."""
+
+    if not disable_type_checks:
+        _fcn_name = 'linear_light'
+        assert_image_format(img_in, _fcn_name, 'img_in')
+        assert_image_format(img_layer, _fcn_name, 'img_layer')
+        assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
+    img_in_norm = img_in / 255.0
+    img_layer_norm = img_layer / 255.0
+
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
+
+    comp = np.clip(img_in_norm[:, :, :3] + 2 * img_layer_norm[:, :, :3] - 1.0, 0.0, 1.0)
+
+    ratio_rs = np.reshape(np.repeat(ratio, 3), comp.shape)
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+
+    return np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3]))) * 255.0
+
+def vivid_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
+    """Apply vivid_light blending mode."""
+
+    if not disable_type_checks:
+        _fcn_name = 'vivid_light'
+        assert_image_format(img_in, _fcn_name, 'img_in')
+        assert_image_format(img_layer, _fcn_name, 'img_layer')
+        assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
+    img_in_norm = img_in / 255.0
+    img_layer_norm = img_layer / 255.0
+
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
+
+    comp = np.where(
+        img_layer_norm[:, :, :3] < 0.5,
+        1 - (1 - img_in_norm[:, :, :3]) / (2 * img_layer_norm[:, :, :3] + 1e-6),
+        img_in_norm[:, :, :3] / (2 * (1 - img_layer_norm[:, :, :3]) + 1e-6)
+    )
+    comp = np.clip(comp, 0.0, 1.0)
+
+    ratio_rs = np.reshape(np.repeat(ratio, 3), comp.shape)
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+
+    return np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3]))) * 255.0
+
+def pin_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
+
+    if not disable_type_checks:
+        _fcn_name = 'pin_light'
+        assert_image_format(img_in, _fcn_name, 'img_in')
+        assert_image_format(img_layer, _fcn_name, 'img_layer')
+        assert_opacity(opacity, _fcn_name)
+    
+    img_in = _ensure_rgba(img_in)
+    img_layer = _ensure_rgba(img_layer)
+
+    img_in_norm = img_in / 255.0
+    img_layer_norm = img_layer / 255.0
+
+    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
+
+    comp = np.where(
+        img_layer_norm[:, :, :3] < 0.5,
+        np.minimum(img_in_norm[:, :, :3], 2 * img_layer_norm[:, :, :3]),
+        np.maximum(img_in_norm[:, :, :3], 2 * img_layer_norm[:, :, :3] - 1)
+    )
+
+    ratio_rs = np.reshape(np.repeat(ratio, 3), comp.shape)
+    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
+
+    return np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3]))) * 255.0
