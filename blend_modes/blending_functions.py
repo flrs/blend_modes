@@ -81,16 +81,28 @@ def _ensure_rgba(img):
         raise ValueError(f"Expected 3 or 4 channels, got {img.shape[2]}")
 
 
-def _compose_alpha(img_in, img_layer, opacity):
-    """Calculate alpha composition ratio between two images.
-    """
+def _apply_composite(img_in_norm, img_layer_norm, comp, opacity):
+    """Apply W3C standard alpha compositing for non-normal blend modes.
 
-    comp_alpha = np.minimum(img_in[:, :, 3], img_layer[:, :, 3]) * opacity
-    new_alpha = img_in[:, :, 3] + (1.0 - img_in[:, :, 3]) * comp_alpha
-    np.seterr(divide='ignore', invalid='ignore')
-    ratio = comp_alpha / new_alpha
-    ratio[np.isnan(ratio)] = 0.0
-    return ratio
+    Implements the formula from the W3C Compositing and Blending specification:
+        αo = αs + αb*(1-αs)
+        Co = [αs*(1-αb)*Cs + αs*αb*B(Cb,Cs) + (1-αs)*αb*Cb] / αo
+
+    This correctly handles partial transparency in both the base and layer images,
+    unlike the previous _compose_alpha approach which fixed output alpha to the
+    base alpha and ignored the layer's contribution to transparent areas.
+    """
+    alpha_s = np.expand_dims(img_layer_norm[:, :, 3] * opacity, 2)
+    alpha_b = np.expand_dims(img_in_norm[:, :, 3], 2)
+    alpha_out = alpha_s + alpha_b * (1.0 - alpha_s)
+
+    C_s = img_layer_norm[:, :, :3]
+    C_b = img_in_norm[:, :, :3]
+
+    numerator = alpha_s * (1.0 - alpha_b) * C_s + alpha_s * alpha_b * comp + (1.0 - alpha_s) * alpha_b * C_b
+    img_out = np.where(alpha_out > 0, numerator / alpha_out, 0.0)
+
+    return np.nan_to_num(np.dstack((img_out, alpha_out[:, :, 0])))
 
 
 def normal(img_in, img_layer, opacity, disable_type_checks: bool = False):
@@ -203,14 +215,10 @@ def soft_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = (1.0 - img_in_norm[:, :, :3]) * img_in_norm[:, :, :3] * img_layer_norm[:, :, :3] \
            + img_in_norm[:, :, :3] * (1.0 - (1.0 - img_in_norm[:, :, :3]) * (1.0 - img_layer_norm[:, :, :3]))
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -260,13 +268,9 @@ def lighten_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.maximum(img_in_norm[:, :, :3], img_layer_norm[:, :, :3])
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -317,13 +321,9 @@ def screen(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = 1.0 - (1.0 - img_in_norm[:, :, :3]) * (1.0 - img_layer_norm[:, :, :3])
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -374,13 +374,9 @@ def dodge(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.minimum(img_in_norm[:, :, :3] / (1.0 - img_layer_norm[:, :, :3]), 1.0)
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -431,13 +427,9 @@ def addition(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
+    comp = np.clip(img_in_norm[:, :, :3] + img_layer_norm[:, :, :3], 0.0, 1.0)
 
-    comp = img_in_norm[:, :, :3] + img_layer_norm[:, :, :3]
-
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = np.clip(comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs), 0.0, 1.0)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -488,13 +480,9 @@ def darken_only(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.minimum(img_in_norm[:, :, :3], img_layer_norm[:, :, :3])
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -545,13 +533,9 @@ def multiply(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.clip(img_layer_norm[:, :, :3] * img_in_norm[:, :, :3], 0.0, 1.0)
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -602,17 +586,13 @@ def hard_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.greater(img_layer_norm[:, :, :3], 0.5) \
            * np.minimum(1.0 - ((1.0 - img_in_norm[:, :, :3])
                                * (1.0 - (img_layer_norm[:, :, :3] - 0.5) * 2.0)), 1.0) \
            + np.logical_not(np.greater(img_layer_norm[:, :, :3], 0.5)) \
            * np.minimum(img_in_norm[:, :, :3] * (img_layer_norm[:, :, :3] * 2.0), 1.0)
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -663,14 +643,9 @@ def difference(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
+    comp = np.abs(img_in_norm[:, :, :3] - img_layer_norm[:, :, :3])
 
-    comp = img_in_norm[:, :, :3] - img_layer_norm[:, :, :3]
-    comp[comp < 0.0] *= -1.0
-
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -721,13 +696,9 @@ def subtract(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
+    comp = np.clip(img_in_norm[:, :, :3] - img_layer_norm[:, :, :3], 0.0, 1.0)
 
-    comp = img_in_norm[:, :, :3] - img_layer_norm[:, :, :3]
-
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = np.clip(comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs), 0.0, 1.0)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -777,13 +748,9 @@ def grain_extract(img_in, img_layer, opacity, disable_type_checks: bool = False)
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.clip(img_in_norm[:, :, :3] - img_layer_norm[:, :, :3] + 0.5, 0.0, 1.0)
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -833,13 +800,9 @@ def grain_merge(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.clip(img_in_norm[:, :, :3] + img_layer_norm[:, :, :3] - 0.5, 0.0, 1.0)
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -890,13 +853,9 @@ def divide(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.minimum((256.0 / 255.0 * img_in_norm[:, :, :3]) / (1.0 / 255.0 + img_layer_norm[:, :, :3]), 1.0)
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 
@@ -952,16 +911,11 @@ def overlay(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.less(img_in_norm[:, :, :3], 0.5) * (2 * img_in_norm[:, :, :3] * img_layer_norm[:, :, :3]) \
            + np.greater_equal(img_in_norm[:, :, :3], 0.5) \
            * (1 - (2 * (1 - img_in_norm[:, :, :3]) * (1 - img_layer_norm[:, :, :3])))
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))  # add alpha channel and replace nans
-    
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 def linear_burn(img_in, img_layer, opacity, disable_type_checks: bool = False):
@@ -979,16 +933,9 @@ def linear_burn(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
-    # 🔥 Core formula
     comp = np.clip(img_in_norm[:, :, :3] + img_layer_norm[:, :, :3] - 1.0, 0.0, 1.0)
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-    img_out = np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3])))
-
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
     return img_out * 255.0
 
 def color_burn(img_in, img_layer, opacity, disable_type_checks: bool = False):
@@ -1006,17 +953,13 @@ def color_burn(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.clip(
-    1.0 - np.minimum(1.0, (1.0 - img_in_norm[:, :, :3]) / (img_layer_norm[:, :, :3] + 1e-6)),
-    0.0, 1.0
-)
+        1.0 - np.minimum(1.0, (1.0 - img_in_norm[:, :, :3]) / (img_layer_norm[:, :, :3] + 1e-6)),
+        0.0, 1.0
+    )
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), comp.shape)
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-
-    return np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3]))) * 255.0
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
+    return img_out * 255.0
 
 def exclusion(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply exclusion blending mode."""
@@ -1033,14 +976,10 @@ def exclusion(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = img_in_norm[:, :, :3] + img_layer_norm[:, :, :3] - 2 * img_in_norm[:, :, :3] * img_layer_norm[:, :, :3]
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), comp.shape)
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-
-    return np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3]))) * 255.0
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
+    return img_out * 255.0
 
 def linear_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply linear_light blending mode."""
@@ -1057,14 +996,10 @@ def linear_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.clip(img_in_norm[:, :, :3] + 2 * img_layer_norm[:, :, :3] - 1.0, 0.0, 1.0)
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), comp.shape)
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-
-    return np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3]))) * 255.0
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
+    return img_out * 255.0
 
 def vivid_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     """Apply vivid_light blending mode."""
@@ -1081,19 +1016,14 @@ def vivid_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
-    comp = np.where(
+    comp = np.clip(np.where(
         img_layer_norm[:, :, :3] < 0.5,
         1 - (1 - img_in_norm[:, :, :3]) / (2 * img_layer_norm[:, :, :3] + 1e-6),
         img_in_norm[:, :, :3] / (2 * (1 - img_layer_norm[:, :, :3]) + 1e-6)
-    )
-    comp = np.clip(comp, 0.0, 1.0)
+    ), 0.0, 1.0)
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), comp.shape)
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-
-    return np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3]))) * 255.0
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
+    return img_out * 255.0
 
 def pin_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
 
@@ -1109,18 +1039,14 @@ def pin_light(img_in, img_layer, opacity, disable_type_checks: bool = False):
     img_in_norm = img_in / 255.0
     img_layer_norm = img_layer / 255.0
 
-    ratio = _compose_alpha(img_in_norm, img_layer_norm, opacity)
-
     comp = np.where(
         img_layer_norm[:, :, :3] < 0.5,
         np.minimum(img_in_norm[:, :, :3], 2 * img_layer_norm[:, :, :3]),
         np.maximum(img_in_norm[:, :, :3], 2 * img_layer_norm[:, :, :3] - 1)
     )
 
-    ratio_rs = np.reshape(np.repeat(ratio, 3), comp.shape)
-    img_out = comp * ratio_rs + img_in_norm[:, :, :3] * (1.0 - ratio_rs)
-
-    return np.nan_to_num(np.dstack((img_out, img_in_norm[:, :, 3]))) * 255.0
+    img_out = _apply_composite(img_in_norm, img_layer_norm, comp, opacity)
+    return img_out * 255.0
 
     
 

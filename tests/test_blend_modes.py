@@ -163,3 +163,30 @@ def test_assert_opacity_right_variable_type():
 def test_assert_opacity_wrong_variable_range(opacity):
     with pytest.raises(ValueError):
         assert assert_opacity(opacity, '')
+
+
+def test_alpha_compositing_partial_transparency():
+    """Regression test for issue #22: wrong transparency results with partial alpha.
+
+    When the base image has partial transparency, the output alpha must follow
+    Porter-Duff (αo = αs + αb*(1-αs)) and the output color must account for
+    the layer's contribution to transparent base areas. Previously, the output
+    alpha was always set to the base alpha, producing wrong results.
+    """
+    # 1x1 base pixel: semi-transparent red
+    base = np.zeros((1, 1, 4), dtype=float)
+    base[0, 0] = [255.0, 0.0, 0.0, 128.0]  # red, 50% alpha
+
+    # 1x1 layer pixel: fully opaque white
+    layer = np.zeros((1, 1, 4), dtype=float)
+    layer[0, 0] = [255.0, 255.0, 255.0, 255.0]  # white, fully opaque
+
+    opacity = 1.0
+
+    # With a fully opaque layer, output alpha must always be 255 regardless of base alpha
+    for fn in [multiply, screen, overlay, soft_light, hard_light,
+               addition, difference, darken_only, lighten_only,
+               dodge, divide, subtract, grain_extract, grain_merge]:
+        result = fn(base, layer, opacity)
+        assert result[0, 0, 3] == pytest.approx(255.0, abs=1.0), \
+            f"{fn.__name__}: expected output alpha=255 but got {result[0, 0, 3]}"
